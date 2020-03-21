@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MyRealTrip</string>
+    <string name="version">v1.0</string>
+    <string name="explain">최신 뉴스를 제공합니다.\n뉴스의 키워드를 알아보세요</string>
+</resources>
