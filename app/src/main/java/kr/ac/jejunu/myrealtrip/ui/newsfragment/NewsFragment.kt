@@ -1,6 +1,7 @@
 package kr.ac.jejunu.myrealtrip.ui.newsfragment
 
 import android.util.DisplayMetrics
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,10 +16,12 @@ import kr.ac.jejunu.myrealtrip.ui.newsviewmodel.NewsViewModel
 import org.koin.android.ext.android.inject
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 
-class NewsFragment : BaseFragment<FragmentNewsBinding, NewsViewModel>(R.layout.fragment_news),SwipeRefreshLayout.OnRefreshListener {
-    private val newsAdapter : NewsAdapter by inject()
-//    private lateinit var newsAdapter : NewsAdapter
-    override val viewModel: NewsViewModel by inject()
+class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news),
+    SwipeRefreshLayout.OnRefreshListener {
+    private val newsAdapter: NewsAdapter by inject()
+    private val viewModel : NewsViewModel by inject()
+    //    private lateinit var newsAdapter : NewsAdapter
+//    override val viewModel: NewsViewModel by inject()
 //    override fun getViewModel(): Class<NewsViewModel> = NewsViewModel by inject()
 //    override fun getBindingVariable(): Int = BR.viewModel
 
@@ -27,7 +30,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding, NewsViewModel>(R.layout.f
         binding.newsRecycler.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = newsAdapter
-            addItemDecoration(DividerItemDecoration(requireContext(),LinearLayoutManager.VERTICAL))
+            addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
         }
 //        viewModel.rssLiveData.observe(this, Observer {
 //            newsAdapter.submitList(it)
@@ -41,8 +44,8 @@ class NewsFragment : BaseFragment<FragmentNewsBinding, NewsViewModel>(R.layout.f
 //            newsAdapter.setState(state ?: State.DONE)
 //        }
         with(viewModel) {
-            getNews()
             rssLiveData.observe(this@NewsFragment, Observer {
+                Log.d("viewmodel","$it")
                 it.channel?.item?.let { it1 -> newsAdapter.setNewsItem(it1) }
             })
         }
@@ -50,7 +53,6 @@ class NewsFragment : BaseFragment<FragmentNewsBinding, NewsViewModel>(R.layout.f
 
     override fun onRefresh() {
         with(viewModel) {
-            getNews()
             rssLiveData.observe(this@NewsFragment, Observer {
                 it.channel?.item?.let { it1 -> newsAdapter.setNewsItem(it1) }
             })

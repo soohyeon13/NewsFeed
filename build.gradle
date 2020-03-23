@@ -5,7 +5,7 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.1'
@@ -20,7 +20,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+
     }
 }
 
@@ -33,8 +33,9 @@ ext {
     glide_version = '4.11.0'
     lifecycle_viewModel_version = '2.2.0'
     retrofit_version = '2.7.2'
-    rx_version ='2.2.9'
+    rx_version = '2.2.9'
     rx_android_version = '2.1.1'
     koin_version = '1.0.2'
     paging_version = '2.1.2'
+    okhttp_version = '4.4.0'
 }

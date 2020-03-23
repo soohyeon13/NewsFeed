@@ -9,11 +9,11 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 
-abstract class BaseFragment<VDB : ViewDataBinding, VM : BaseViewModel>(
+abstract class BaseFragment<VDB : ViewDataBinding>(
     private val layoutId: Int
 ) : Fragment() {
     protected lateinit var binding:VDB
-    abstract val viewModel : VM
+//    abstract val viewModel : VM
 //    protected lateinit var viewModel : VM
 
 //    protected abstract fun getViewModel() :Class<VM>

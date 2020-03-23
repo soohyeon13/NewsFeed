@@ -1,5 +1,6 @@
 package kr.ac.jejunu.myrealtrip.model.data.datamodel.htmlmodel
 
+import io.reactivex.Completable
 import io.reactivex.Single
 import org.jsoup.nodes.Document
 

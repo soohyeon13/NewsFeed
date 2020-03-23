@@ -12,20 +12,21 @@ import kr.ac.jejunu.myrealtrip.databinding.NewsItemBinding
 import kr.ac.jejunu.myrealtrip.model.data.Item
 import kr.ac.jejunu.myrealtrip.model.data.State
 import kr.ac.jejunu.myrealtrip.model.data.datamodel.htmlmodel.HtmlDataModel
+import kr.ac.jejunu.myrealtrip.model.repository.Repository
 import kr.ac.jejunu.myrealtrip.ui.newsviewmodel.itemviewmodel.NewsItemViewModel
 
-class NewsAdapter(private val dataModel: HtmlDataModel) :
+class NewsAdapter(private val repository: Repository) :
     RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
-    private lateinit var binding: NewsItemBinding
+    private val TAG = "NewsAdapter"
 //    private var state = State.LOADING
     private lateinit var newsList: List<Item>
 
-    inner class NewsViewHolder(private val binding: NewsItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        private val viewModel = NewsItemViewModel(dataModel)
+    inner class NewsViewHolder(private val newsBinding: NewsItemBinding) :
+        RecyclerView.ViewHolder(newsBinding.root) {
+        private val viewModel = NewsItemViewModel(repository)
         fun bind(news: Item) {
             viewModel.bind(news)
-            binding.itemViewModel = viewModel
+            newsBinding.itemViewModel = viewModel
         }
     }
 
@@ -69,7 +70,7 @@ class NewsAdapter(private val dataModel: HtmlDataModel) :
 //    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
-        binding = DataBindingUtil.inflate(
+        val binding : NewsItemBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             R.layout.news_item,
             parent,

@@ -1,5 +1,6 @@
 package kr.ac.jejunu.myrealtrip
 
+import android.util.Log
 import org.jsoup.Jsoup
 import org.junit.Test
 
@@ -13,8 +14,11 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        Jsoup.connect("https://nypost.com/2020/03/18/voters-brave-coronavirus-make-joe-biden-presumptive-nominee/")
+        Jsoup.connect("https://news.google.com/__i/rss/rd/articles/CBMiKGh0dHBzOi8vd3d3Lm5vY3V0bmV3cy5jby5rci9uZXdzLzUzMTI4NTTSASpodHRwczovL20ubm9jdXRuZXdzLmNvLmtyL25ld3MvYW1wLzUzMTI4NTQ?oc=5")
             .get().run {
+                this.body().select("div[itemprop=articleBody]").forEach {
+                    println(it.text())
+                }
                 select("meta[property=og:image]").forEachIndexed { index, element ->
                     val imageUrl =element.attr("content")
                     println("url : $imageUrl")

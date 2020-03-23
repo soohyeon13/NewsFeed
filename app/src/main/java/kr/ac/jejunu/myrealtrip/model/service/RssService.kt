@@ -10,6 +10,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface RssService {
-    @GET("/rss")
+    @GET("/rss?hl=ko&gl=KR&ceid=KR:ko")
     fun searchRss() : Single<Rss>
 }

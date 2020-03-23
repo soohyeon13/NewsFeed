@@ -11,4 +11,8 @@ abstract class BaseItemViewModel<T> : ViewModel() {
         compositeDisposable.add(disposable)
     }
     abstract fun bind(data:T)
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.dispose()
+    }
 }
