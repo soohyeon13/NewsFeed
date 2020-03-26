@@ -2,45 +2,36 @@ package kr.ac.jejunu.myrealtrip.ui.newsviewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.toLiveData
+import io.reactivex.BackpressureStrategy
 import kr.ac.jejunu.myrealtrip.base.BaseViewModel
-import kr.ac.jejunu.myrealtrip.model.data.Rss
-import kr.ac.jejunu.myrealtrip.model.repository.Repository
+import kr.ac.jejunu.myrealtrip.data.response.RssResponse
+import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
+import kr.ac.jejunu.myrealtrip.domain.repository.Repository
+import kr.ac.jejunu.myrealtrip.ui.news.listener.OnItemClickEvent
+import kr.ac.jejunu.myrealtrip.util.SingleLiveEvent
+import java.util.*
 
 class NewsViewModel(
     private val repository: Repository
 ) : BaseViewModel() {
-    private val TAG = "NewsViewModel"
-    private var _rssLiveData = MutableLiveData<Rss>()
-    val rssLiveData: LiveData<Rss>
-        get() = _rssLiveData
-
+    companion object{
+        private val TAG = "NewsViewModel"
+    }
+    val newsItemsLiveData : LiveData<List<Optional<NewsItem>>> = repository.getNewsItems().toFlowable(BackpressureStrategy.BUFFER).toLiveData()
     init {
-        getNews()
+        loadNewsItems()
     }
 
-    private fun getNews() {
-        addDisposable(repository.getRssSubject().subscribe({
-            Log.d("$TAG get", "$it")
-            _rssLiveData.value = it
-        }, {
-            Log.d(TAG, "${it.message}")
-        }))
+    fun reload() {
+        loadNewsItems()
     }
-//    private fun getNews() {
-//        addDisposable(
-//            model.getRss()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe({
-//                    it.run {
-//                        if (channel!!.item!!.isNotEmpty()) {
-//                            _rssLiveData.value = this
-//                        }
-//                    }
-//                }, {
-//                    Log.d(TAG, "error : ${it.message}")
-//                })
-//        )
-//    }
+
+    private fun loadNewsItems() {
+        repository.loadRss().subscribe({},{
+            Log.d(TAG,"error : ${it.message}")
+        }).let {
+            addDisposable(it)
+        }
+    }
 }

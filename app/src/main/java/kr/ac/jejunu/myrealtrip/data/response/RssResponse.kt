@@ -1,27 +1,23 @@
-package kr.ac.jejunu.myrealtrip.model.data
+package kr.ac.jejunu.myrealtrip.data.response
 
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList
-import org.simpleframework.xml.Namespace
 import org.simpleframework.xml.Root
-import javax.xml.bind.annotation.XmlElement
-import javax.xml.bind.annotation.XmlElements
-import javax.xml.bind.annotation.XmlRootElement
 
 @Root(name = "rss",strict = false)
-data class Rss(
+data class RssResponse(
     @field:Element(name = "channel")
-    var channel : Channel? = null
+    var channelResponse : ChannelResponse? = null
 )
 
 @Root(name = "channel",strict = false)
-data class Channel(
+data class ChannelResponse(
     @field:ElementList(name = "item",inline = true,required = false)
-    var item:List<Item>? = null
+    var itemResponse:List<ItemResponse>? = null
 )
 
 @Root(name = "item",strict = false)
-data class Item(
+data class ItemResponse(
     @field:Element(name = "title")
     var title :String? = null,
     @field:Element(name = "link")

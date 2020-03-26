@@ -1,4 +1,4 @@
-package kr.ac.jejunu.myrealtrip.model.service
+package kr.ac.jejunu.myrealtrip.data.service
 
 import io.reactivex.Single
 import org.jsoup.nodes.Document

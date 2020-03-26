@@ -10,7 +10,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.0-alpha04"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -20,6 +20,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "https://jitpack.io" }
 
     }
 }
@@ -29,7 +30,7 @@ task clean(type: Delete) {
 }
 
 ext {
-    nav_version = '2.3.0-alpha03'
+    nav_version = '2.3.0-alpha04'
     glide_version = '4.11.0'
     lifecycle_viewModel_version = '2.2.0'
     retrofit_version = '2.7.2'
@@ -38,4 +39,5 @@ ext {
     koin_version = '1.0.2'
     paging_version = '2.1.2'
     okhttp_version = '4.4.0'
+    nasca_version = '1.0.4'
 }

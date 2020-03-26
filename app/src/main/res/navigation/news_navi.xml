@@ -7,7 +7,21 @@
 
     <fragment
         android:id="@+id/newsFragment"
-        android:name="kr.ac.jejunu.myrealtrip.ui.newsfragment.NewsFragment"
-        android:label="NewsFragment"
-        tools:layout="@layout/fragment_news"/>
+        android:name="kr.ac.jejunu.myrealtrip.ui.news.NewsFragment"
+        android:label="@string/news_label"
+        tools:layout="@layout/fragment_news">
+        <action
+            android:id="@+id/action_newsFragment_to_newsDetailFragment"
+            app:destination="@id/newsDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newsDetailFragment"
+        android:name="kr.ac.jejunu.myrealtrip.ui.newsdetail.NewsDetailFragment"
+        android:label="{newsTitle}"
+        tools:layout="@layout/fragment_news_detail"
+        >
+        <argument
+            android:name="newsTitle"
+            app:argType="string"/>
+    </fragment>
 </navigation>

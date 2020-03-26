@@ -1,66 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="itemViewModel"
             type="kr.ac.jejunu.myrealtrip.ui.newsviewmodel.itemviewmodel.NewsItemViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/newsItemContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <com.mrt.nasca.NascaView
             android:id="@+id/thumbnail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            ImageUrl="@{itemViewModel.imageUrl}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:adjustViewBounds="true"
-            ImageUrl="@{itemViewModel.imageUrl}"
+            app:layout_constraintDimensionRatio = "1:1"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/textView"
+            app:layout_constraintEnd_toStartOf="@+id/newsTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/newsTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="@{itemViewModel.title}"
-            android:textColor="@color/colorTitle"
-            android:singleLine="true"
             android:ellipsize="end"
             android:maxLines="1"
+            android:singleLine="true"
+            android:text="@{itemViewModel.title}"
+            android:textColor="@color/colorTitle"
             android:textSize="20dp"
             android:textStyle="bold"
+            app:layout_constraintHorizontal_weight="3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/thumbnail"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/newsDesc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:lines="2"
-            android:text="@{itemViewModel.des}"
             android:ellipsize="end"
+            android:lines="2"
             android:maxLines="2"
+            android:text="@{itemViewModel.des}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintStart_toStartOf="@+id/newsTitle"
+            app:layout_constraintTop_toBottomOf="@+id/newsTitle" />
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/keyWordContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="test keyword"
+            android:layout_marginTop="8dp"
+            android:gravity="left"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintStart_toStartOf="@+id/newsTitle"
+            app:layout_constraintTop_toBottomOf="@+id/newsDesc">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/keyword_shape"
+                android:padding="4dp"
+                android:text="@{itemViewModel.firstKeyWord}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/keyword_shape"
+                android:padding="4dp"
+                android:text="@{itemViewModel.secondKeyWord}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/keyword_shape"
+                android:padding="4dp"
+                android:text="@{itemViewModel.thirdKeyWord}" />
+
+        </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

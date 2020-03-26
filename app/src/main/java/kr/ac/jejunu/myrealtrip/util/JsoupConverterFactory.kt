@@ -23,7 +23,7 @@ object JsoupConverterFactory : Converter.Factory() {
     private class JsoupConverter(val baseUri: String) : Converter<ResponseBody, Document?> {
 
         override fun convert(value: ResponseBody?): Document? {
-            val charset = value?.contentType()?.charset() ?: Charset.forName("UTF-8")
+            val charset = value?.contentType()?.charset() ?: Charset.forName("utf-8")
 
             val parser = when (value?.contentType().toString()) {
                 "application/xml", "text/xml" -> Parser.xmlParser()
