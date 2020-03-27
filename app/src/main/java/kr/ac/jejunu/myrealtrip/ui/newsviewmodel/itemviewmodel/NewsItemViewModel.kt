@@ -1,10 +1,13 @@
 package kr.ac.jejunu.myrealtrip.ui.newsviewmodel.itemviewmodel
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kr.ac.jejunu.myrealtrip.base.BaseItemViewModel
 import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
+import com.google.common.base.Optional
+import io.reactivex.Single
 import kr.ac.jejunu.myrealtrip.domain.repository.Repository
 import java.net.URLEncoder
 import java.util.*
@@ -30,25 +33,38 @@ class NewsItemViewModel : BaseItemViewModel<NewsItem>() {
     val thirdKeyWord: LiveData<String>
         get() = _thirdKeyWord
 
-    override fun bind(data: Optional<NewsItem>) {
-        if (data.isPresent) {
-            data.get().let {
-                _imageUrl.value = it.imageUrl
-                _des.value = it.desc
-                _title.value = it.title
-                if (it.keyWord?.isNotEmpty()!!) {
-                    _firstKeyWord.value = it.keyWord?.get(0)
-                    _secondKeyWord.value = it.keyWord?.get(1)
-                    _thirdKeyWord.value = it.keyWord?.get(2)
-                }
-//
-//                it.keyWord.let {word ->
-//                    _firstKeyWord.value = word?.get(0)
-//                    _secondKeyWord.value = word?.get(1)
-//                    _thirdKeyWord.value = word?.get(2)
+    override fun bind(data: Single<NewsItem>) {
+        Log.d(TAG,data.toString())
+        addDisposable(data.subscribe({
+            _title.postValue(it.title)
+            _des.postValue(it.desc)
+           _imageUrl.postValue(it.imageUrl)
+        },{}))
+//        data.subscribe({
+//            Log.d(TAG,"$it")
+//            _imageUrl.postValue(it.imageUrl)
+//            _des.postValue(it.desc)
+//            _title.postValue(it.title)
+//            if (!it.keyWord.isNullOrEmpty()) {
+//                _firstKeyWord.postValue(it.keyWord!![0])
+//                _secondKeyWord.postValue(it.keyWord!![1])
+//                _thirdKeyWord.postValue(it.keyWord!![2])
+//            }
+//        },{
+//            Log.d(TAG,"error : ${it.message}")
+//        })
+//        if (data.isPresent) {
+//            data.get().let {
+//                _imageUrl.value = it.imageUrl
+//                _des.value = it.desc
+//                _title.value = it.title
+//                if (it.keyWord?.isNotEmpty()!!) {
+//                    _firstKeyWord.value = it.keyWord?.get(0) ?: ""
+//                    _secondKeyWord.value = it.keyWord?.get(1) ?: ""
+//                    _thirdKeyWord.value = it.keyWord?.get(2) ?: ""
 //                }
-            }
-        }
+//            }
+//        }
     }
 }
 

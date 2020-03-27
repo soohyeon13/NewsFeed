@@ -1,29 +1,30 @@
 package kr.ac.jejunu.myrealtrip.ui.news.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.common.base.Optional
+import io.reactivex.Single
 import kr.ac.jejunu.myrealtrip.R
 import kr.ac.jejunu.myrealtrip.databinding.NewsItemBinding
 import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
-import kr.ac.jejunu.myrealtrip.ui.news.listener.OnItemClickEvent
 import kr.ac.jejunu.myrealtrip.ui.newsviewmodel.itemviewmodel.NewsItemViewModel
-import java.util.*
 
 class NewsAdapter :
     RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
     private val TAG = "NewsAdapter"
 
     private lateinit var binding: NewsItemBinding
-    private lateinit var newsList: List<Optional<NewsItem>>
+    private lateinit var newsList: List<Single<NewsItem>>
     private lateinit var mOnItemClickListener: View.OnClickListener
 
     inner class NewsViewHolder(private val newsBinding: NewsItemBinding) :
         RecyclerView.ViewHolder(newsBinding.root) {
         private val viewModel = NewsItemViewModel()
-        fun bind(news: Optional<NewsItem>) {
+        fun bind(news: Single<NewsItem>) {
             itemView.tag = this
             itemView.setOnClickListener(mOnItemClickListener)
             viewModel.bind(news)
@@ -46,8 +47,8 @@ class NewsAdapter :
         return NewsViewHolder(binding)
     }
 
-    fun setNewsItem(news: List<Optional<NewsItem>>) {
-        this.newsList = news
+    fun setNewsItem(news: List<Single<NewsItem>>) {
+        this.newsList = ArrayList(news)
         notifyDataSetChanged()
     }
 

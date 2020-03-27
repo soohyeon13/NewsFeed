@@ -1,9 +1,10 @@
 package kr.ac.jejunu.myrealtrip.data.repository
 
 import android.util.Log
-import androidx.core.text.parseAsHtml
+import com.google.common.base.Optional
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import kr.ac.jejunu.myrealtrip.data.response.RssResponse
@@ -11,11 +12,6 @@ import kr.ac.jejunu.myrealtrip.data.service.HtmlService
 import kr.ac.jejunu.myrealtrip.data.service.RssService
 import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 import kr.ac.jejunu.myrealtrip.domain.repository.Repository
-import org.jsoup.Jsoup
-import java.net.URLEncoder
-import java.nio.charset.Charset
-import java.util.*
-import kotlin.collections.ArrayList
 
 class RepositoryImpl(
     private val rssService: RssService,
@@ -32,7 +28,7 @@ class RepositoryImpl(
 
     private val rssSubject = BehaviorSubject.create<RssResponse>()
     private val htmlSubject = BehaviorSubject.create<Map<String?, NewsItem>>()
-    private var newsItemsSubject = BehaviorSubject.create<MutableList<Optional<NewsItem>>>()
+    private var newsItemsSubject = BehaviorSubject.create<List<Single<NewsItem>>>()
     override fun loadRss(): Completable {
         return rssService.searchRss()
             .subscribeOn(Schedulers.io())
@@ -45,45 +41,78 @@ class RepositoryImpl(
     }
 
     private fun loadNewsItems(rssResponse: RssResponse) {
-        rssResponse.channelResponse?.itemResponse?.also {
-            newsItemsSubject.onNext(MutableList(it.size){Optional.empty<NewsItem>()})
-        }?.forEachIndexed { index, itemResponse ->
-            val url = itemResponse.link.toString()
-            val regex = Regex(pattern = "(?<=(/))\\w*(?=\\?)").find(url)
-            val resultReg: String? = regex?.value
-            resultReg?.let { reg ->
-                htmlService.getHtml(reg, URL_QUERY)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ document ->
-                        document.outputSettings().charset("UTF-8").outline(true).prettyPrint(true)
-                        Log.d(TAG,"${document.charset()}")
-                        val imgUrl = document.head().select(META_IMAGE_TAG).attr(META_CONTENT)
-                        val des = document.head().select(META_DESCRIPTION_TAG).attr(META_CONTENT)
-                        val content = document.body().select(BODY_ARTICLE_CONTENT).text()
-                        Log.d(TAG,"charset : ${document.outputSettings().charset().newEncoder().charset()}title : ${itemResponse.title} des : $des content : $content")
-                        newsItemsSubject.value!!.apply {
-                            set(
-                                index,
-                                Optional.of(NewsItem(
+        rssResponse.channelResponse?.itemResponse?.map { itemResponse ->
+            Single.create<NewsItem> {
+                val url = itemResponse.link.toString()
+                val regex = Regex(pattern = "(?<=(/))\\w*(?=\\?)").find(url)
+                val resultRex: String? = regex?.value
+                resultRex?.let { reg ->
+                    htmlService.getHtml(reg, URL_QUERY)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ document ->
+                            document.outputSettings().charset("UTF-8").outline(true)
+                                .prettyPrint(true)
+                            val imgUrl = document.head().select(META_IMAGE_TAG).attr(META_CONTENT)
+                            val des =
+                                document.head().select(META_DESCRIPTION_TAG).attr(META_CONTENT)
+                            val content = document.body().select(BODY_ARTICLE_CONTENT).text()
+                            it.onSuccess(
+                                NewsItem(
                                     title = itemResponse.title,
                                     imageUrl = imgUrl,
                                     desc = des,
                                     content = content,
                                     link = itemResponse.link,
                                     keyWord = findKeyWord(content ?: des)
-                                ))
+                                )
                             )
-                        }.let {items ->
-                            newsItemsSubject.onNext(items)
-                        }
-                    }, {
-                        Log.d(TAG, "error: ${it.message}")
-                    })
+                        }, { error ->
+                            it.onError(error)
+                            Log.d(TAG, "error: ${error.message}")
+                        })
+                }
             }
+        }?.let {
+            newsItemsSubject.onNext(it)
         }
+
+//        rssResponse.channelResponse?.itemResponse?.also {
+//            newsItemsSubject.onNext(MutableList(it.size){Single<NewsItem>()})
+//        }?.forEachIndexed { index, itemResponse ->
+//            val url = itemResponse.link.toString()
+//            val regex = Regex(pattern = "(?<=(/))\\w*(?=\\?)").find(url)
+//            val resultReg: String? = regex?.value
+//            resultReg?.let { reg ->
+//                htmlService.getHtml(reg, URL_QUERY)
+//                    .subscribeOn(Schedulers.io())
+//                    .subscribe({ document ->
+//                        val imgUrl = document.head().select(META_IMAGE_TAG).attr(META_CONTENT)
+//                        val des = document.head().select(META_DESCRIPTION_TAG).attr(META_CONTENT)
+//                        val content = document.body().select(BODY_ARTICLE_CONTENT).text()
+//                        newsItemsSubject.value!!.apply {
+//                            set(
+//                                index,
+//                                Optional.of(NewsItem(
+//                                    title = itemResponse.title,
+//                                    imageUrl = imgUrl,
+//                                    desc = des,
+//                                    content = content,
+//                                    link = itemResponse.link,
+//                                    keyWord = findKeyWord(content ?: des)
+//                                ))
+//                            )
+//                        }.let {items ->
+//                            newsItemsSubject.onNext(items)
+//                        }
+//                    }, {
+//                        Log.d(TAG, "error: ${it.message}")
+//                    })
+//            }
+//        }
     }
 
-    private fun findKeyWord(content: String?) :List<String> {
+
+    private fun findKeyWord(content: String?): List<String> {
         val wordMap = mutableMapOf<String, Int?>()
         val regex = Regex(pattern = "([^0-9a-zA-Z가-힣])")
         content?.split(" ")
@@ -117,7 +146,7 @@ class RepositoryImpl(
                 break@loop
             }
         }
-       return keyWords
+        return keyWords
     }
 
     private fun sortByWord(words: List<Pair<Int?, List<Pair<String, Int?>>>>, index: Int)
@@ -138,7 +167,7 @@ class RepositoryImpl(
         }
     }
 
-    override fun getNewsItems():Observable<List<Optional<NewsItem>>> {
+    override fun getNewsItems(): Observable<List<Single<NewsItem>>> {
         return newsItemsSubject.map {
             listOf(*it.toTypedArray())
         }.hide()
