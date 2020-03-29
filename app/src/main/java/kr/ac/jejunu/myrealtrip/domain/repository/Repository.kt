@@ -11,5 +11,5 @@ interface Repository {
     fun loadRss() : Completable
     fun getRss() : Observable<RssResponse>
     fun getNews(title:String) : Observable<NewsItem>
-    fun getNewsItems() : Observable<List<NewsItem>>
+    fun getNewsItems(page:Int) : Observable<List<NewsItem>>
 }

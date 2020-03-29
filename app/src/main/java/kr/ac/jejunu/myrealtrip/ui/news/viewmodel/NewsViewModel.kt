@@ -12,7 +12,7 @@ class NewsViewModel(
     companion object{
         private val TAG = "NewsViewModel"
     }
-    val newsItemsLiveData  = repository.getNewsItems().toLiveData()
+    val newsItemsLiveData  = repository.getNewsItems(1).toLiveData()
     init {
         Log.d(TAG,Objects.toString(repository))
     }

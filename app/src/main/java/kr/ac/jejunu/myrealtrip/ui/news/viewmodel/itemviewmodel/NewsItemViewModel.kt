@@ -30,10 +30,12 @@ class NewsItemViewModel() : BaseItemViewModel<NewsItem>() {
         _title.value = data.title
         _imageUrl.value = data.imageUrl
         _des.value = data.desc
-        data.keyWord?.let {
-            _firstKeyWord.value = it[0] ?: ""
-            _secondKeyWord.value = it[1] ?: ""
-            _thirdKeyWord.value = it[2] ?:""
+        if (data.keyWord?.size ==3) {
+            data.keyWord?.let {
+                _firstKeyWord.value = it[0]
+                _secondKeyWord.value = it[1]
+                _thirdKeyWord.value = it[2]
+            }
         }
     }
 }

@@ -35,7 +35,6 @@ class RepositoryImpl(
             .doOnSuccess {
                 if (!it.channelResponse?.itemResponse.isNullOrEmpty()) {
                     rssSubject.onNext(it)
-                    Log.d("$TAG rss", "$it")
                     loadNewsItems(it)
                 }
             }.ignoreElement()
@@ -63,24 +62,18 @@ class RepositoryImpl(
                                 .select(BODY_ARTICLE_CONTENT)
                                 .text()
                             val newsItem = newsItemsMap.value!!
-                            Log.d("$TAG NEWSITEM","$newsItem")
-                            if (newsItem.contains(title)) {
+                            if (!newsItem.contains(title)) {
                                 newsItem.let { map ->
-                                    Log.d("$TAG mapItem","$map")
                                     val newMap = HashMap(map)
                                     val keywords = findKeyWord(content ?: des)
                                     newMap[title] =
                                         NewsItem(title, imgUrl, des, content, url, keywords)
-                                    Log.d(TAG,"$newMap")
+                                    Log.d(TAG,"start")
+                                    newMap.forEach {
+                                        println(it.value)
+                                    }
                                     newsItemsMap.onNext(newMap)
                                 }
-                            }else {
-                                val newMap = HashMap(newsItemsMap.value!!)
-                                val keywords = findKeyWord(content ?: des)
-                                newMap[title] =
-                                    NewsItem(title, imgUrl, des, content, url, keywords)
-                                Log.d(TAG,"$newMap")
-                                newsItemsMap.onNext(newMap)
                             }
                         }, {
                             Log.d(TAG, "error ${it.message}")
@@ -142,14 +135,13 @@ class RepositoryImpl(
         }
     }
 
-    override fun getNewsItems(): Observable<List<NewsItem>> {
-        return newsItemsMap.map {
-            it.values.toList()
-        }.hide()
+    override fun getNewsItems(page: Int): Observable<List<NewsItem>> {
+        return newsItemsMap.filter { it.values.size < page * 20 }
+            .map { it.values.toList().takeLast(page * 20) }.distinctUntilChanged().hide()
     }
 
-    fun getNewsItems(page: Int): Observable<List<NewsItem>> {
-        return newsItemsMap.filter { it.values.size < page * 20 }
-            .map { it.values.toList().takeLast(page * 20) }.distinctUntilChanged()
-    }
+//    fun getNewsItems(page: Int): Observable<List<NewsItem>> {
+//        return newsItemsMap.filter { it.values.size < page * 20 }
+//            .map { it.values.toList().takeLast(page * 20) }.distinctUntilChanged()
+//    }
 }

@@ -48,11 +48,9 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news),
             adapter = newsAdapter
             addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
         }
-        newsAdapter.setOnItemClickListener(onItemClickListener)
 
         with(viewModel) {
             newsItemsLiveData.observe(viewLifecycleOwner, Observer {
-                Log.d(TAG,"$it")
                 newsAdapter.setNewsItem(it)
             })
         }
