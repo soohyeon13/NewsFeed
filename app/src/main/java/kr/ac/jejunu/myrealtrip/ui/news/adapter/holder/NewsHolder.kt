@@ -13,7 +13,7 @@ class NewsHolder(val binding: NewsItemBinding) :BaseViewHolder<NewsItem>(binding
     override fun bind(item: NewsItem, clickListener: OnItemClickEvent<NewsItem>) {
         viewModel.bind(item)
         binding.itemViewModel = viewModel
-//        itemView.setOnClickListener(mOnItemClickListener)
+        itemView.setOnClickListener(clickListener)
         itemView.tag = this
     }
 }

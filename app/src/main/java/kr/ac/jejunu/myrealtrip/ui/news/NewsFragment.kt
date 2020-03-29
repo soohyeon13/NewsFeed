@@ -16,31 +16,20 @@ import kr.ac.jejunu.myrealtrip.base.BaseFragment
 import kr.ac.jejunu.myrealtrip.databinding.FragmentNewsBinding
 import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 import kr.ac.jejunu.myrealtrip.ui.news.adapter.NewsAdapter
+import kr.ac.jejunu.myrealtrip.ui.news.listener.OnItemClickEvent
 import kr.ac.jejunu.myrealtrip.ui.news.viewmodel.NewsViewModel
 import org.koin.android.ext.android.inject
 
 class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news),
-    SwipeRefreshLayout.OnRefreshListener {
+    SwipeRefreshLayout.OnRefreshListener,
+    OnItemClickEvent<NewsItem> {
     companion object {
         private val TAG = "NewsFragment"
     }
 
     private val newsAdapter: NewsAdapter by inject()
     private val viewModel: NewsViewModel by inject()
-
-    private val onItemClickListener = View.OnClickListener {
-        val viewHolder = it.tag as RecyclerView.ViewHolder
-        val position = viewHolder.adapterPosition
-        val bundle = Bundle()
-//        if (list[position].isPresent) {
-//            list[position].get().let { item ->
-//                bundle.putString("newsTitle", item.title)
-//                bundle.putString("newsLink", item.link)
-//            }
-//        }
-        it.findNavController().navigate(R.id.action_newsFragment_to_newsDetailFragment, bundle)
-    }
-    private lateinit var list: List<Single<NewsItem>>
+    private var page = 0
     override fun initView() {
         binding.swipeRefreshLayout.setOnRefreshListener(this)
         binding.newsRecycler.apply {
@@ -48,9 +37,11 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news),
             adapter = newsAdapter
             addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
         }
-
+        newsAdapter.setOnItemClickListener(this)
         with(viewModel) {
             newsItemsLiveData.observe(viewLifecycleOwner, Observer {
+                page += 1
+                viewModel.getPage(page)
                 newsAdapter.setNewsItem(it)
             })
         }
@@ -60,10 +51,11 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news),
         viewModel.reload()
         binding.swipeRefreshLayout.isRefreshing = false
     }
-//    interface DataProvider {
-//        val newsItems : LiveData<List<Optional<NewsItem>>>
-//    }
-//    interface ActionHandler {
-//        fun refresh()
-//    }
+
+    override fun onItemClick(item: NewsItem) {
+        val bundle = Bundle()
+        bundle.putString("newsTitle",item.title)
+        bundle.putString("newsLink",item.link)
+        findNavController().navigate(R.id.action_newsFragment_to_newsDetailFragment,bundle)
+    }
 }

@@ -12,13 +12,15 @@ class NewsViewModel(
     companion object{
         private val TAG = "NewsViewModel"
     }
-    val newsItemsLiveData  = repository.getNewsItems(1).toLiveData()
-    init {
-        Log.d(TAG,Objects.toString(repository))
-    }
+    private var page = 1
+    val newsItemsLiveData  = repository.getNewsItems(page).toLiveData()
 
     fun reload() {
         loadNewsItems()
+    }
+
+    fun getPage(page:Int) {
+        this.page = page
     }
 
     private fun loadNewsItems() {

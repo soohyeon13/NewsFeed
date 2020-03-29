@@ -13,6 +13,7 @@ import kr.ac.jejunu.myrealtrip.databinding.NewsItemBinding
 import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 import kr.ac.jejunu.myrealtrip.ui.news.adapter.holder.LoadHolder
 import kr.ac.jejunu.myrealtrip.ui.news.adapter.holder.NewsHolder
+import kr.ac.jejunu.myrealtrip.ui.news.listener.OnItemClickEvent
 import kr.ac.jejunu.myrealtrip.ui.news.listener.OnLoadListener
 import kr.ac.jejunu.myrealtrip.ui.news.viewmodel.itemviewmodel.NewsItemViewModel
 import kr.ac.jejunu.myrealtrip.util.DiffCallback
@@ -27,23 +28,11 @@ class NewsAdapter :
 
     private lateinit var mOnLoadListener: OnLoadListener
     private var newsList = mutableListOf<NewsItem>()
-    private lateinit var mOnItemClickListener: View.OnClickListener
+    private lateinit var mOnItemClickListener: OnItemClickEvent<NewsItem>
 
-//    inner class NewsViewHolder(private val newsBinding: NewsItemBinding) :
-//        RecyclerView.ViewHolder(newsBinding.root) {
-//        private val viewModel = NewsItemViewModel()
-//        fun bind(news: NewsItem) {
-//            itemView.tag = this
-//            itemView.setOnClickListener(mOnItemClickListener)
-//            viewModel.bind(news)
-//            newsBinding.itemViewModel = viewModel
-//        }
-//    }
-
-    fun setOnItemClickListener(itemClickListener: View.OnClickListener) {
+    fun setOnItemClickListener(itemClickListener: OnItemClickEvent<NewsItem>) {
         mOnItemClickListener = itemClickListener
     }
-
 
     fun setOnLoadListener(onLoadListener: OnLoadListener) {
         this.mOnLoadListener = onLoadListener
