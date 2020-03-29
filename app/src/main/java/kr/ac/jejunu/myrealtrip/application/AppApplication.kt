@@ -35,7 +35,7 @@ class AppApplication : Application() {
                     .uncaughtException(Thread.currentThread(),error)
                 return@setErrorHandler
             }
-            Log.w("Undeliverable exception received, not sure what to do", error)
+            Log.w("Undeliverable exception", error)
         }
     }
 }

@@ -1,21 +1,22 @@
 package kr.ac.jejunu.myrealtrip.ui.news
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.common.base.Optional
 import io.reactivex.Single
 import kr.ac.jejunu.myrealtrip.R
 import kr.ac.jejunu.myrealtrip.base.BaseFragment
 import kr.ac.jejunu.myrealtrip.databinding.FragmentNewsBinding
 import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 import kr.ac.jejunu.myrealtrip.ui.news.adapter.NewsAdapter
-import kr.ac.jejunu.myrealtrip.ui.newsviewmodel.NewsViewModel
+import kr.ac.jejunu.myrealtrip.ui.news.viewmodel.NewsViewModel
 import org.koin.android.ext.android.inject
 
 class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news),
@@ -51,7 +52,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news),
 
         with(viewModel) {
             newsItemsLiveData.observe(viewLifecycleOwner, Observer {
-                list = it
+                Log.d(TAG,"$it")
                 newsAdapter.setNewsItem(it)
             })
         }

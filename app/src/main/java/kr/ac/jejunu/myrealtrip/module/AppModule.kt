@@ -5,8 +5,8 @@ import kr.ac.jejunu.myrealtrip.data.repository.RepositoryImpl
 import kr.ac.jejunu.myrealtrip.data.service.HtmlService
 import kr.ac.jejunu.myrealtrip.data.service.RssService
 import kr.ac.jejunu.myrealtrip.ui.news.adapter.NewsAdapter
-import kr.ac.jejunu.myrealtrip.ui.news.listener.OnItemClickEvent
-import kr.ac.jejunu.myrealtrip.ui.newsviewmodel.NewsViewModel
+import kr.ac.jejunu.myrealtrip.ui.news.viewmodel.NewsViewModel
+import kr.ac.jejunu.myrealtrip.ui.splash.viewmodel.SplashViewModel
 import kr.ac.jejunu.myrealtrip.util.JsoupConverterFactory
 import kr.ac.jejunu.myrealtrip.util.ResponseInterceptor
 import okhttp3.OkHttpClient
@@ -39,8 +39,8 @@ var retrofit = module {
 }
 
 var repository = module {
-    single<Repository>{
-        RepositoryImpl(get(),get())
+    single<Repository> {
+        RepositoryImpl(get(), get())
     }
 }
 var newsViewModel = module {
@@ -48,20 +48,12 @@ var newsViewModel = module {
         NewsViewModel(get())
     }
 }
-//
-//val newsDataProvider = module {
-//    newsViewModel as NewsFragment.DataProvider
-//}
-//val newsActionHandler = module {
-//    newsViewModel as NewsFragment.ActionHandler
-//}
+var splashViewModel = module {
+    viewModel {
+        SplashViewModel(get())
+    }
+}
 var newsAdapter = module {
     factory { NewsAdapter() }
 }
-
-//val newsModule = listOf(newsViewModel,newsDataProvider, newsActionHandler, newsAdapter)
-
-//var dataModule = listOf(repository, retrofit)
-//var uiModule = listOf(newsModule)
-
-var modules = listOf(repository, retrofit,newsViewModel, newsAdapter)
+var modules = listOf(repository, retrofit, newsViewModel, newsAdapter, splashViewModel)

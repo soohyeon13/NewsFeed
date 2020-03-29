@@ -10,7 +10,6 @@ import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 interface Repository {
     fun loadRss() : Completable
     fun getRss() : Observable<RssResponse>
-    fun getHtml() : Observable<Map<String?, NewsItem>>
     fun getNews(title:String) : Observable<NewsItem>
-    fun getNewsItems() : Observable<List<Single<NewsItem>>>
+    fun getNewsItems() : Observable<List<NewsItem>>
 }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/news_navi"
-    app:startDestination="@id/newsFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/newsFragment"
@@ -23,5 +23,13 @@
         <argument
             android:name="newsTitle"
             app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="kr.ac.jejunu.myrealtrip.ui.splash.SplashFragment"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_splashFragment_to_newsFragment"
+            app:destination="@id/newsFragment" />
     </fragment>
 </navigation>

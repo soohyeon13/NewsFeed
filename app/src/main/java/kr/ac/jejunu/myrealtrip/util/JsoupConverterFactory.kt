@@ -1,5 +1,6 @@
 package kr.ac.jejunu.myrealtrip.util
 
+import android.util.Log
 import okhttp3.ResponseBody
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

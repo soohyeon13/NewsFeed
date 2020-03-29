@@ -13,7 +13,7 @@ abstract class BaseItemViewModel<T> : ViewModel() {
     fun addDisposable(disposable: Disposable) {
         compositeDisposable.add(disposable)
     }
-    abstract fun bind(data:Single<T>)
+    abstract fun bind(data:T)
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
