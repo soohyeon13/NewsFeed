@@ -5,6 +5,7 @@ import android.os.Handler
 import android.util.DisplayMetrics
 import android.widget.ImageView
 import androidx.databinding.library.BuildConfig
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import kr.ac.jejunu.myrealtrip.R
@@ -15,7 +16,7 @@ import kr.ac.jejunu.myrealtrip.ui.splash.viewmodel.SplashViewModel
 import org.koin.android.ext.android.inject
 
 class SplashFragment : BaseFragment<FragmentSplashBinding>(R.layout.fragment_splash) {
-    private val SPLACH_TIME: Long = 3000
+    private val SPLACH_TIME: Long = 1300
     private val viewModel : SplashViewModel by inject()
     init{
         viewModel

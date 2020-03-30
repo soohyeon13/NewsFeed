@@ -7,7 +7,7 @@ class ResponseInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(chain.request())
         return response.newBuilder()
-            .addHeader("Content-Encoding", "UTF-8")
+            .header("Content-Type", "charset=uft-8")
             .build()
     }
 }

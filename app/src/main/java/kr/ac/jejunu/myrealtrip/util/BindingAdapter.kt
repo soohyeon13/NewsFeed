@@ -21,6 +21,6 @@ object BindingAdapter  {
     @JvmStatic
     @BindingAdapter("visible")
     fun setVisible(view:View,visible : Boolean) {
-        view.visibility  = if (visible) View.VISIBLE else View.GONE
+        view.visibility  = if (visible) View.VISIBLE else View.INVISIBLE
     }
 }

@@ -1,11 +1,10 @@
 package kr.ac.jejunu.myrealtrip.data.repository
 
+import android.util.Base64
 import android.util.Log
-import androidx.navigation.fragment.DialogFragmentNavigatorDestinationBuilder
-import com.google.common.base.Optional
+import androidx.core.text.htmlEncode
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import kr.ac.jejunu.myrealtrip.data.response.RssResponse
@@ -13,6 +12,13 @@ import kr.ac.jejunu.myrealtrip.data.service.HtmlService
 import kr.ac.jejunu.myrealtrip.data.service.RssService
 import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 import kr.ac.jejunu.myrealtrip.domain.repository.Repository
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import java.io.ByteArrayOutputStream
+import java.net.URLDecoder
+import java.nio.ByteBuffer
+import java.nio.CharBuffer
+import java.nio.charset.Charset
 
 class RepositoryImpl(
     private val rssService: RssService,
@@ -68,10 +74,6 @@ class RepositoryImpl(
                                     val keywords = findKeyWord(content ?: des)
                                     newMap[title] =
                                         NewsItem(title, imgUrl, des, content, url, keywords)
-                                    Log.d(TAG,"start")
-                                    newMap.forEach {
-                                        println(it.value)
-                                    }
                                     newsItemsMap.onNext(newMap)
                                 }
                             }
@@ -82,7 +84,6 @@ class RepositoryImpl(
             }
         }
     }
-
 
     private fun findKeyWord(content: String?): List<String> {
         val wordMap = mutableMapOf<String, Int?>()
@@ -136,12 +137,8 @@ class RepositoryImpl(
     }
 
     override fun getNewsItems(page: Int): Observable<List<NewsItem>> {
+        Log.d(TAG,"$page")
         return newsItemsMap.filter { it.values.size < page * 20 }
             .map { it.values.toList().takeLast(page * 20) }.distinctUntilChanged().hide()
     }
-
-//    fun getNewsItems(page: Int): Observable<List<NewsItem>> {
-//        return newsItemsMap.filter { it.values.size < page * 20 }
-//            .map { it.values.toList().takeLast(page * 20) }.distinctUntilChanged()
-//    }
 }

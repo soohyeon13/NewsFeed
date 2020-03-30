@@ -1,10 +1,16 @@
 package kr.ac.jejunu.myrealtrip
 
 import android.util.Log
+import kr.ac.jejunu.myrealtrip.data.repository.RepositoryImpl
+import kr.ac.jejunu.myrealtrip.data.service.HtmlService
+import kr.ac.jejunu.myrealtrip.domain.repository.Repository
+import kr.ac.jejunu.myrealtrip.util.JsoupConverterFactory
 import org.jsoup.Jsoup
 import org.junit.Test
 
 import org.junit.Assert.*
+import java.net.URL
+import java.nio.charset.Charset
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -14,8 +20,11 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        Jsoup.connect("https://news.google.com/__i/rss/rd/articles/CBMiKGh0dHBzOi8vd3d3Lm5vY3V0bmV3cy5jby5rci9uZXdzLzUzMTI4NTTSASpodHRwczovL20ubm9jdXRuZXdzLmNvLmtyL25ld3MvYW1wLzUzMTI4NTQ?oc=5")
+//        val url ="https://news.google.com/__i/rss/rd/articles/CBMiNmh0dHBzOi8vd3d3Lm1rLmNvLmtyL25ld3Mvc29jaWV0eS92aWV3LzIwMjAvMDMvMzI2MjI5L9IBOGh0dHBzOi8vbS5tay5jby5rci9uZXdzL3NvY2lldHkvdmlldy1hbXAvMjAyMC8wMy8zMjYyMjkv?oc=5"
+//        val doc = Jsoup.parse(URL(url).openStream(),Charset.forName("euc-kr"),url)
+        Jsoup.connect("https://news.google.com/__i/rss/rd/articles/CBMiNmh0dHBzOi8vd3d3Lm1rLmNvLmtyL25ld3Mvc29jaWV0eS92aWV3LzIwMjAvMDMvMzI2MjI5L9IBOGh0dHBzOi8vbS5tay5jby5rci9uZXdzL3NvY2lldHkvdmlldy1hbXAvMjAyMC8wMy8zMjYyMjkv?oc=5")
             .get().run {
+                println(this)
                 this.body().select("div[itemprop=articleBody]").forEach {
                     println(it.text())
                 }
@@ -30,3 +39,4 @@ class ExampleUnitTest {
             }
     }
 }
+

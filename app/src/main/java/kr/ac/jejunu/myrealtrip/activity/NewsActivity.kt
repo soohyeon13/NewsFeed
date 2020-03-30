@@ -9,6 +9,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import kotlinx.android.synthetic.main.activity_news.*
 import kr.ac.jejunu.myrealtrip.R
 import kr.ac.jejunu.myrealtrip.databinding.ActivityNewsBinding
 
@@ -22,6 +23,11 @@ class NewsActivity : AppCompatActivity() {
         navController = Navigation.findNavController(this, R.id.fragment)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.newsFragment) {
+                binding.toolbar.navigationIcon = null
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean =

@@ -16,7 +16,10 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 
-val client = OkHttpClient.Builder().addInterceptor(ResponseInterceptor()).build()
+val client = OkHttpClient
+    .Builder()
+    .addInterceptor(ResponseInterceptor())
+    .build()
 var retrofit = module {
     single<RssService> {
         Retrofit.Builder()

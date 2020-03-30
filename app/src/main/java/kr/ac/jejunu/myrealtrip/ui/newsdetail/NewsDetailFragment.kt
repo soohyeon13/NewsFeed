@@ -18,6 +18,11 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>(R.layout.frag
             binding.detailWebView.loadUrl("${it.get("newsLink")}")
         }
         binding.detailWebView.listener = object : NascaViewListener() {
+            override fun onImageClicked(index: Int, url: String) {
+                super.onImageClicked(index, url)
+                binding.failedLoad.visibility = View.GONE
+            }
+
             override fun onLoadingFailed(url: String, errorCode: Int, errorMsg: CharSequence?) {
                 super.onLoadingFailed(url, errorCode, errorMsg)
                 binding.failedLoad.visibility = View.VISIBLE
