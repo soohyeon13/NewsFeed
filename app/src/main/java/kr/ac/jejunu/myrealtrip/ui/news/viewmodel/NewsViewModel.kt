@@ -3,6 +3,7 @@ package kr.ac.jejunu.myrealtrip.ui.news.viewmodel
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.reactivex.subjects.BehaviorSubject
 import kr.ac.jejunu.myrealtrip.base.BaseViewModel
 import kr.ac.jejunu.myrealtrip.domain.repository.Repository
 import kr.ac.jejunu.myrealtrip.util.toLiveData
@@ -20,15 +21,15 @@ class NewsViewModel(
     private var _isProgress = MutableLiveData<Boolean>()
     val isProgress : LiveData<Boolean>
         get() = _isProgress
-    private var page =1
-    val newsItemsLiveData  = repository.getNewsItems(page).toLiveData()
+    private var page =BehaviorSubject.createDefault(1)
+    val newsItemsLiveData  =page.switchMap { page -> repository.getNewsItems(page) }.toLiveData()
 
     fun reload() {
         loadNewsItems()
     }
 
-    fun loadPage(page:Int) {
-        this.page = page
+    fun loadPage() {
+        page.onNext(page.value!!+1)
     }
 
     private fun loadNewsItems() {

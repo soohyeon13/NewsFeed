@@ -16,7 +16,6 @@ class DiffCallback(
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-
         val isTitle = oldList[oldItemPosition]?.title == newList[newItemPosition].title
         val isDesc = oldList[oldItemPosition]?.desc == newList[newItemPosition].desc
         val isImgUrl = oldList[oldItemPosition]?.imageUrl == newList[newItemPosition].imageUrl

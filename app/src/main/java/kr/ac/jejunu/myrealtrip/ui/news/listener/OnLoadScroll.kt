@@ -1,19 +1,16 @@
 package kr.ac.jejunu.myrealtrip.ui.news.listener
 
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class OnLoadScroll : RecyclerView.OnScrollListener {
     private lateinit var mOnLoadListener: OnLoadListener
-    private var visibleThreshold = 5
+    private var visibleThreshold = 3
     private var isLoad = false
     private var lastVisibleItem = 0
     private var totalItemCount = 0
-    private val mLayoutManager: RecyclerView.LayoutManager
-
-    constructor(layoutManager: LinearLayoutManager) {
-        this.mLayoutManager = layoutManager
-    }
+    private var mLayoutManager: RecyclerView.LayoutManager
 
     fun setLoad() {
         this.isLoad = false
@@ -25,6 +22,9 @@ class OnLoadScroll : RecyclerView.OnScrollListener {
 
     fun setLoadListener(mOnLoadListener: OnLoadListener) {
         this.mOnLoadListener = mOnLoadListener
+    }
+    constructor(layoutManager:LinearLayoutManager) {
+        this.mLayoutManager = layoutManager
     }
 
 
@@ -38,17 +38,5 @@ class OnLoadScroll : RecyclerView.OnScrollListener {
             mOnLoadListener.onLoad()
             isLoad = true
         }
-    }
-
-    private fun getLastVisibleItem(lastVisibleItemPosition: IntArray): Int {
-        var maxSize = 0
-        for (i in lastVisibleItemPosition.indices) {
-            if (i == 0) {
-                maxSize = lastVisibleItemPosition[i]
-            }else if (lastVisibleItemPosition[i] > maxSize) {
-                maxSize = lastVisibleItemPosition[i]
-            }
-        }
-        return maxSize
     }
 }

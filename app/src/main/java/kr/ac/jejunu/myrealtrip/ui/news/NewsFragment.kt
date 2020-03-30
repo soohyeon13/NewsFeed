@@ -33,12 +33,13 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news),
     private lateinit var scrollListener : OnLoadScroll
     private val newsAdapter: NewsAdapter by inject()
     private val viewModel: NewsViewModel by inject()
-    private var page = 1
+    private lateinit var mLayoutManager : LinearLayoutManager
     override fun initView() {
         binding.executePendingBindings()
         binding.swipeRefreshLayout.setOnRefreshListener(this)
+        mLayoutManager = LinearLayoutManager(requireContext())
         binding.newsRecycler.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = mLayoutManager
             adapter = newsAdapter
             setHasFixedSize(true)
             addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
@@ -47,37 +48,24 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news),
         newsAdapter.setOnItemClickListener(this)
         with(viewModel) {
             newsItemsLiveData.observe(viewLifecycleOwner, Observer {
+                Log.d(TAG,"$it")
                 newsAdapter.setNewsItem(it)
-                binding.newsRecycler.smoothScrollToPosition(0)
             })
         }
         setScrollListener()
     }
 
     private fun setScrollListener() {
-        scrollListener = OnLoadScroll(LinearLayoutManager(requireContext()))
+        scrollListener = OnLoadScroll(mLayoutManager)
         scrollListener.setLoadListener(object : OnLoadListener{
             override fun onLoad() {
-                LoadData()
+//                newsAdapter.addLoadingView()
+                viewModel.loadPage()
+//                newsAdapter.removeLoadingView()
+//                scrollListener.setLoad()
             }
         })
         binding.newsRecycler.addOnScrollListener(scrollListener)
-    }
-
-    private fun LoadData() {
-        newsAdapter.addLoadingView()
-        Handler().postDelayed( {
-            with(viewModel) {
-                page+=1
-                loadPage(page)
-                newsItemsLiveData.observe(viewLifecycleOwner, Observer {
-                    newsAdapter.setNewsItem(it)
-                })
-            }
-            newsAdapter.removeLoadingView()
-            scrollListener.setLoad()
-        },3000)
-
     }
 
     override fun onRefresh() {

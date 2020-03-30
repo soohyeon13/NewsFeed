@@ -34,7 +34,7 @@ class RepositoryImpl(
     }
 
     private val rssSubject = BehaviorSubject.create<RssResponse>()
-    private val newsItemsMap = BehaviorSubject.createDefault<Map<String?, NewsItem>>(mapOf())
+    private val newsItemsMap = BehaviorSubject.createDefault<LinkedHashMap<String?, NewsItem>>(linkedMapOf())
     override fun loadRss(): Completable {
         return rssService.searchRss()
             .subscribeOn(Schedulers.io())
@@ -70,7 +70,7 @@ class RepositoryImpl(
                             val newsItem = newsItemsMap.value!!
                             if (!newsItem.contains(title)) {
                                 newsItem.let { map ->
-                                    val newMap = HashMap(map)
+                                    val newMap = LinkedHashMap(map)
                                     val keywords = findKeyWord(content ?: des)
                                     newMap[title] =
                                         NewsItem(title, imgUrl, des, content, url, keywords)

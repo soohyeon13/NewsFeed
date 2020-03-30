@@ -1,6 +1,7 @@
 package kr.ac.jejunu.myrealtrip.ui.news.adapter
 
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ class NewsAdapter :
 
     private lateinit var mOnLoadListener: OnLoadListener
     private var newsList = mutableListOf<NewsItem?>()
+    private var testList = mutableListOf<NewsItem?>()
     private lateinit var mOnItemClickListener: OnItemClickEvent<NewsItem>
 
     fun setOnItemClickListener(itemClickListener: OnItemClickEvent<NewsItem>) {
@@ -38,23 +40,20 @@ class NewsAdapter :
     }
 
     fun addLoadingView() {
-        Handler().post {
-            newsList.add(null)
-            notifyItemInserted(newsList.size)
-        }
+        newsList.add(null)
+
     }
 
     fun removeLoadingView() {
-        if(newsList.size != 0) {
-            newsList.removeAt(newsList.size-1)
-            notifyItemRemoved(newsList.size)
+        if (newsList.size != 0) {
+            newsList.removeAt(newsList.size - 1)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         return if (newsList[position] == null) {
             VIEW_TYPE_LOADING
-        }else {
+        } else {
             VIEW_TYPE_NEWS
         }
     }
@@ -85,6 +84,12 @@ class NewsAdapter :
     fun setNewsItem(news: List<NewsItem>) {
         val diffCallback = DiffCallback(this.newsList, news)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
+        for (i in newsList.indices) {
+            Log.d("$TAG position", "$i")
+            Log.d(TAG, "${news[i]}")
+            Log.d("$TAG news", "${newsList[i]}")
+
+        }
         this.newsList.clear()
         this.newsList.addAll(news)
         diffResult.dispatchUpdatesTo(this)
