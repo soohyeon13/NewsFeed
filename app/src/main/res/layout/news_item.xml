@@ -5,6 +5,7 @@
 
     <data>
         <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
         <variable
             name="itemViewModel"
             type="kr.ac.jejunu.myrealtrip.ui.news.viewmodel.itemviewmodel.NewsItemViewModel" />
@@ -77,6 +78,7 @@
                 android:layout_marginEnd="4dp"
                 android:background="@drawable/keyword_shape"
                 android:padding="4dp"
+                android:visibility="@{TextUtils.isEmpty(itemViewModel.firstKeyWord) ? View.GONE : View.VISIBLE}"
                 android:text="@{itemViewModel.firstKeyWord}" />
 
             <TextView
@@ -85,6 +87,7 @@
                 android:layout_marginEnd="4dp"
                 android:background="@drawable/keyword_shape"
                 android:padding="4dp"
+                android:visibility="@{TextUtils.isEmpty(itemViewModel.secondKeyWord) ? View.GONE : View.VISIBLE}"
                 android:text="@{itemViewModel.secondKeyWord}" />
 
             <TextView
@@ -92,6 +95,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/keyword_shape"
                 android:padding="4dp"
+                android:visibility="@{TextUtils.isEmpty(itemViewModel.thirdKeyWord) ? View.GONE : View.VISIBLE}"
                 android:text="@{itemViewModel.thirdKeyWord}" />
 
         </LinearLayout>

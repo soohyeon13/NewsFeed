@@ -23,34 +23,3 @@ data class ItemResponse(
     @field:Element(name = "link")
     var link : String? = null
 )
-//@XmlRootElement(name = "rss")
-//data class Rss(
-//    @XmlElement(name = "channel")
-//    var channel : Channel? = null
-//)
-//
-//@XmlRootElement(name = "channel")
-//data class Channel(
-//    @XmlElement(name = "item",required = false)
-//    var item:List<Item>? = null
-//)
-//
-//@XmlRootElement(name = "item")
-//data class Item(
-//    @XmlElement(name = "title")
-//    var title :String? = null,
-//    @XmlElement(name = "link")
-//    var link : String? = null
-//)
-
-//data class Rss(
-//    val channel:Channel
-//)
-//data class Channel(
-//    val item:List<Item>
-//)
-//
-//data class Item(
-//    val title:String,
-//    val link :String
-//)

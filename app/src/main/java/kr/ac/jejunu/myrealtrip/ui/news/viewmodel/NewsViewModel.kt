@@ -1,40 +1,32 @@
 package kr.ac.jejunu.myrealtrip.ui.news.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import io.reactivex.subjects.BehaviorSubject
 import kr.ac.jejunu.myrealtrip.base.BaseViewModel
 import kr.ac.jejunu.myrealtrip.domain.repository.Repository
 import kr.ac.jejunu.myrealtrip.util.toLiveData
-import java.util.*
 
 class NewsViewModel(
     private val repository: Repository
 ) : BaseViewModel() {
-    companion object{
+    companion object {
         private val TAG = "NewsViewModel"
     }
-    private var _isVisible = MutableLiveData<Boolean>()
-    val isVisible : LiveData<Boolean>
-        get() = _isVisible
-    private var _isProgress = MutableLiveData<Boolean>()
-    val isProgress : LiveData<Boolean>
-        get() = _isProgress
-    private var page =BehaviorSubject.createDefault(1)
-    val newsItemsLiveData  =page.switchMap { page -> repository.getNewsItems(page) }.toLiveData()
+
+    private var page = BehaviorSubject.createDefault(1)
+    val newsItemsLiveData = page.switchMap { page -> repository.getNewsItems(page) }.toLiveData()
 
     fun reload() {
         loadNewsItems()
     }
 
     fun loadPage() {
-        page.onNext(page.value!!+1)
+        page.onNext(page.value!! + 1)
     }
 
     private fun loadNewsItems() {
-        repository.loadRss().subscribe({},{
-            Log.d(TAG,"error : ${it.message}")
+        repository.loadNews().subscribe({ page.onNext(1) }, {
+            Log.d(TAG, "error : ${it.message}")
         }).let {
             addDisposable(it)
         }

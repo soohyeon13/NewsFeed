@@ -1,8 +1,6 @@
 package kr.ac.jejunu.myrealtrip.data.repository
 
-import android.util.Base64
 import android.util.Log
-import androidx.core.text.htmlEncode
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
@@ -12,12 +10,6 @@ import kr.ac.jejunu.myrealtrip.data.service.HtmlService
 import kr.ac.jejunu.myrealtrip.data.service.RssService
 import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 import kr.ac.jejunu.myrealtrip.domain.repository.Repository
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import java.io.ByteArrayOutputStream
-import java.net.URLDecoder
-import java.nio.ByteBuffer
-import java.nio.CharBuffer
 import java.nio.charset.Charset
 
 class RepositoryImpl(
@@ -33,55 +25,50 @@ class RepositoryImpl(
         private val TAG = "RepositoryImpl"
     }
 
-    private val rssSubject = BehaviorSubject.create<RssResponse>()
-    private val newsItemsMap = BehaviorSubject.createDefault<LinkedHashMap<String?, NewsItem>>(linkedMapOf())
-    override fun loadRss(): Completable {
+    private val newsItemsMap =
+        BehaviorSubject.createDefault<LinkedHashMap<String?, NewsItem>>(linkedMapOf())
+
+    override fun loadNews(): Completable {
         return rssService.searchRss()
             .subscribeOn(Schedulers.io())
             .doOnSuccess {
-                if (!it.channelResponse?.itemResponse.isNullOrEmpty()) {
-                    rssSubject.onNext(it)
-                    loadNewsItems(it)
-                }
+                if (!it.channelResponse?.itemResponse.isNullOrEmpty())
+                    loadHtml(it)
             }.ignoreElement()
     }
 
-    private fun loadNewsItems(rssResponse: RssResponse) {
-        rssResponse.channelResponse?.itemResponse?.also { list ->
-            list.forEach { itemResponse ->
-                val url = itemResponse.link.toString()
-                val regex = Regex(pattern = "(?<=(/))\\w*(?=\\?)").find(url)
-                val resultReg: String? = regex?.value
-                val title = itemResponse.title
-                resultReg?.let { reg ->
-                    htmlService
-                        .getHtml(reg, URL_QUERY)
-                        .subscribeOn(Schedulers.io())
-                        .subscribe({ document ->
-                            val imgUrl = document.head()
-                                .select(META_IMAGE_TAG)
-                                .attr(META_CONTENT)
-                            val des = document.head()
-                                .select(META_DESCRIPTION_TAG)
-                                .attr(META_CONTENT)
-                            val content = document.body()
-                                .select(BODY_ARTICLE_CONTENT)
-                                .text()
-                            val newsItem = newsItemsMap.value!!
-                            if (!newsItem.contains(title)) {
-                                newsItem.let { map ->
-                                    val newMap = LinkedHashMap(map)
-                                    val keywords = findKeyWord(content ?: des)
-                                    newMap[title] =
-                                        NewsItem(title, imgUrl, des, content, url, keywords)
-                                    newsItemsMap.onNext(newMap)
-                                }
-                            }
-                        }, {
-                            Log.d(TAG, "error ${it.message}")
-                        })
-                }
-            }
+    //TODO 얘 너무 이름 길다.
+    private fun loadHtml(rssResponse: RssResponse) {
+        rssResponse.channelResponse?.itemResponse?.forEach { item ->
+            val url = item.link.toString()
+            val regex = Regex(pattern = "(?<=(/))\\w*(?=\\?)").find(url)
+            val resultReg: String? = regex?.value
+            val title = item.title
+            getHtml(resultReg, title, url)
+        }
+    }
+
+    private fun getHtml(resultRex: String?, title: String?, url: String) {
+        resultRex?.let { reg ->
+            htmlService
+                .getHtml(reg, URL_QUERY)
+                .subscribeOn(Schedulers.io())
+                .subscribe({ document ->
+                    val imgUrl = document.head().select(META_IMAGE_TAG).attr(META_CONTENT)
+                    val des = document.head().select(META_DESCRIPTION_TAG).attr(META_CONTENT)
+                    val content = document.body().select(BODY_ARTICLE_CONTENT).text()
+                    var keyContent = content
+                    if (content.isNullOrEmpty()) keyContent = des
+                    val tempMap = newsItemsMap.value!!
+                    if (!tempMap.contains(title)) {
+                        val keywords = findKeyWord(keyContent)
+                        tempMap[title] =
+                            NewsItem(title, imgUrl, des, content, url, keywords)
+                        newsItemsMap.onNext(tempMap)
+                    }
+                }, {
+                    Log.d(TAG, "error ${it.message}")
+                })
         }
     }
 
@@ -96,23 +83,22 @@ class RepositoryImpl(
                 else wordMap[removeDot] = wordMap[removeDot]?.plus(1)
             }
 
-        val sortMapToList =
+        val sortWordMapToList =
             wordMap.toList()
                 .sortedByDescending { (_, value) -> value }
                 .groupBy { (_, value) -> value }
                 .toList()
         var maxKeyWord = 3
         val keyWords = mutableListOf<String>()
-        loop@ for (i in sortMapToList.indices) {
-            if (sortMapToList[i].second.size < maxKeyWord) {
-                val sortKeyWord = sortByWord(sortMapToList, i)
+        loop@ for (i in sortWordMapToList.indices) {
+            val sortKeyWord = sortByWord(sortWordMapToList, i)
+            if (sortWordMapToList[i].second.size < maxKeyWord) {
                 for (j in sortKeyWord.indices) {
                     if (keyWords.size == 3) break@loop
                     keyWords.add(sortKeyWord[j].first)
                 }
-                maxKeyWord -= sortMapToList[i].second.size
+                maxKeyWord -= sortWordMapToList[i].second.size
             } else {
-                val sortKeyWord = sortByWord(sortMapToList, i)
                 for (j in 0 until maxKeyWord) {
                     keyWords.add(sortKeyWord[j].first)
                 }
@@ -125,19 +111,7 @@ class RepositoryImpl(
     private fun sortByWord(words: List<Pair<Int?, List<Pair<String, Int?>>>>, index: Int)
             : List<Pair<String, Int?>> = words[index].second.sortedBy { (word, _) -> word }
 
-
-    override fun getRss(): Observable<RssResponse> {
-        return rssSubject.hide()
-    }
-
-    override fun getNews(title: String): Observable<NewsItem> {
-        return newsItemsMap.map {
-            it[title]
-        }
-    }
-
     override fun getNewsItems(page: Int): Observable<List<NewsItem>> {
-        Log.d(TAG,"$page")
         return newsItemsMap.filter { it.values.size < page * 20 }
             .map { it.values.toList().takeLast(page * 20) }.distinctUntilChanged().hide()
     }

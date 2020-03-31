@@ -1,9 +1,7 @@
 package kr.ac.jejunu.myrealtrip.ui.newsdetail
 
-import android.util.Log
+import android.os.Bundle
 import android.view.View
-import android.webkit.WebSettings
-import androidx.navigation.fragment.findNavController
 import com.mrt.nasca.NascaViewListener
 import kr.ac.jejunu.myrealtrip.R
 import kr.ac.jejunu.myrealtrip.base.BaseFragment
@@ -13,9 +11,14 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>(R.layout.frag
     companion object {
         private val TAG = "NewsDetailFragment"
     }
-    override fun initView() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+    }
+    private fun initView() {
         arguments?.let {
             binding.detailWebView.loadUrl("${it.get("newsLink")}")
+            binding.keyword = it.getStringArrayList("newsKeyWords")
         }
         binding.detailWebView.listener = object : NascaViewListener() {
             override fun onImageClicked(index: Int, url: String) {

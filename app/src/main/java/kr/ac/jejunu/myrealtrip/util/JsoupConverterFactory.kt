@@ -29,17 +29,17 @@ object JsoupConverterFactory : Converter.Factory() {
     private class JsoupConverter(val baseUri: String) : Converter<ResponseBody, Document?> {
 
         override fun convert(value: ResponseBody?): Document? {
-            val charset: Charset
-            if (value?.contentType()?.charset().toString().toLowerCase() == "euc-kr") {
-                charset = value?.contentType()?.charset() ?: Charset.forName("euc-kr")
+            val parser = when (value?.contentType().toString()) {
+                "application/xml", "text/xml" -> Parser.xmlParser()
+                else -> Parser.htmlParser()
+            }
+            Log.d(TAG,"${value?.contentType()}")
+            val chartName = value?.contentType()?.charset()?.name()
+            if (chartName == "euc-kr") {
+                return Jsoup.parse(value.byteStream(), "euc-kr", baseUri, parser)
             } else {
-                charset = value?.contentType()?.charset() ?: Charset.forName("utf-8")
+                return Jsoup.parse(value?.byteStream(), "utf-8", baseUri, parser)
             }
-            val parser = when (value?.contentType().toString().toLowerCase()) {
-                "application/html", "text/html; charset=euc-kr","text/html","text/html; charset=utf-8" -> Parser.htmlParser()
-                else -> Parser.xmlParser()
-            }
-            return Jsoup.parse(value?.byteStream(), charset.name(), baseUri, parser)
         }
     }
 }

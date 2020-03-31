@@ -8,7 +8,6 @@ import kr.ac.jejunu.myrealtrip.module.modules
 import org.koin.android.ext.android.startKoin
 import java.io.IOException
 import java.net.SocketException
-import kotlin.IllegalArgumentException
 
 class AppApplication : Application() {
     override fun onCreate() {

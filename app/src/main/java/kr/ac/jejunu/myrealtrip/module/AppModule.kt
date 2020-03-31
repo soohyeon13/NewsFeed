@@ -20,7 +20,8 @@ val client = OkHttpClient
     .Builder()
     .addInterceptor(ResponseInterceptor())
     .build()
-var retrofit = module {
+var dataModules = module {
+    single<Repository> { RepositoryImpl(get(), get()) }
     single<RssService> {
         Retrofit.Builder()
             .baseUrl("https://news.google.com")
@@ -40,23 +41,11 @@ var retrofit = module {
             .create(HtmlService::class.java)
     }
 }
-
-var repository = module {
-    single<Repository> {
-        RepositoryImpl(get(), get())
-    }
+var viewModelModules = module {
+    viewModel { NewsViewModel(get()) }
+    viewModel { SplashViewModel(get()) }
 }
-var newsViewModel = module {
-    viewModel {
-        NewsViewModel(get())
-    }
-}
-var splashViewModel = module {
-    viewModel {
-        SplashViewModel(get())
-    }
-}
-var newsAdapter = module {
+var adapterModules = module {
     factory { NewsAdapter() }
 }
-var modules = listOf(repository, retrofit, newsViewModel, newsAdapter, splashViewModel)
+var modules = listOf(dataModules, viewModelModules, adapterModules)

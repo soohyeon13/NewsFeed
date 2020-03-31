@@ -1,8 +1,10 @@
 package kr.ac.jejunu.myrealtrip.ui.splash
 
 import android.content.Intent
+import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
+import android.view.View
 import android.widget.ImageView
 import androidx.databinding.library.BuildConfig
 import androidx.navigation.NavOptions
@@ -21,7 +23,12 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(R.layout.fragment_spl
     init{
         viewModel
     }
-    override fun initView() {
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+    }
+    private fun initView() {
         binding.versionText.text = "v${BuildConfig.VERSION_NAME}"
         val dm = DisplayMetrics()
         activity!!.windowManager.defaultDisplay.getMetrics(dm)

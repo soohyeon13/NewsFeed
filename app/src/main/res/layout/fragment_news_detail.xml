@@ -5,15 +5,52 @@
     <data>
 
         <import type="android.view.View" />
-
+        <import type="java.util.ArrayList" />
         <variable
             name="progress"
             type="Integer" />
+
+        <variable
+            name="keyword"
+            type="java.util.ArrayList&lt;String>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/keyword_shape"
+                android:padding="4dp"
+                android:text="@{keyword[0]}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/keyword_shape"
+                android:padding="4dp"
+                android:text="@{keyword[1]}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/keyword_shape"
+                android:padding="4dp"
+                android:text="@{keyword[2]}" />
+        </LinearLayout>
 
         <com.mrt.nasca.NascaView
             android:id="@+id/detailWebView"
@@ -23,7 +60,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
             app:nasca_zoomable="true" />
 
         <TextView
@@ -40,6 +77,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
+            android:id="@+id/progressBar"
             style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
             android:layout_width="0dp"
             android:layout_height="10dp"

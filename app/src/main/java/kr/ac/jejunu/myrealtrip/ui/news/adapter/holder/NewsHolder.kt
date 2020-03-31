@@ -7,6 +7,7 @@ import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 import kr.ac.jejunu.myrealtrip.ui.news.viewmodel.itemviewmodel.NewsItemViewModel
 
 class NewsHolder(val binding: NewsItemBinding) : BaseViewHolder<NewsItem?>(binding.root) {
+
     private val viewModel = NewsItemViewModel()
     override fun bind(item: NewsItem?) {
         viewModel.bind(item)
@@ -16,4 +17,5 @@ class NewsHolder(val binding: NewsItemBinding) : BaseViewHolder<NewsItem?>(bindi
     fun setListener(clickListener: View.OnClickListener) {
         itemView.setOnClickListener(clickListener)
     }
+
 }
