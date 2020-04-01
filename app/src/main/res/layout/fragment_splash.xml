@@ -1,56 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/centerContainer"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="30dp"
             android:background="@drawable/circle_shape"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintEnd_toStartOf="@+id/rightLogo"
+            app:layout_constraintStart_toEndOf="@+id/leftLogo"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.33">
 
             <ImageView
                 android:id="@+id/centerLogo"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:src="@drawable/logo_center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent="0.6" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
         <ImageView
             android:id="@+id/leftLogo"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/logo_left"
             app:layout_constraintBottom_toBottomOf="@+id/centerContainer"
             app:layout_constraintEnd_toStartOf="@+id/centerContainer"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.1" />
 
         <ImageView
             android:id="@+id/rightLogo"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/logo_right"
             app:layout_constraintBottom_toBottomOf="@+id/centerContainer"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/centerContainer" />
+            app:layout_constraintStart_toEndOf="@+id/centerContainer"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.1" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left"
+            android:gravity="start"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -82,18 +96,6 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
-        <!--<TextView
-            android:id="@+id/explainText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:lines="2"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:text="@string/explain"
-            app:layout_constraintTop_toBottomOf="@+id/centerContainer"
-            tools:layout_editor_absoluteX="0dp" />-->
 
         <TextView
             android:id="@+id/versionText"

@@ -18,9 +18,4 @@ object BindingAdapter  {
     fun setImageUrl(view:NascaView,url:String?) {
         url?.let { view.loadImages(it) }
     }
-    @JvmStatic
-    @BindingAdapter("visible")
-    fun setVisible(view:View,visible : Boolean) {
-        view.visibility  = if (visible) View.VISIBLE else View.INVISIBLE
-    }
 }
