@@ -16,6 +16,7 @@
             android:layout_marginBottom="30dp"
             android:background="@drawable/circle_shape"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toStartOf="@+id/rightLogo"
             app:layout_constraintStart_toEndOf="@+id/leftLogo"
             app:layout_constraintWidth_default="percent"

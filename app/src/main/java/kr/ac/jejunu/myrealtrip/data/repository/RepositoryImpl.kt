@@ -53,14 +53,13 @@ class RepositoryImpl(
                 .getHtml(reg, URL_QUERY)
                 .subscribeOn(Schedulers.io())
                 .subscribe({ document ->
-                    val checkKR = Regex(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")
                     val imgUrl = document.head().select(META_IMAGE_TAG).attr(META_CONTENT)
                     val des = document.head().select(META_DESCRIPTION_TAG).attr(META_CONTENT)
                     val content = document.body().select(BODY_ARTICLE_CONTENT).text()
                     var keyContent = content
                     if (content.isNullOrEmpty()) keyContent = des
                     val tempMap = newsItemsMap.value!!
-                    if (!tempMap.contains(title) || !checkKR.matches(des)) {
+                    if (!tempMap.contains(title) && !des.contains("\uFFFD")) {
                         val keywords = findKeyWord(keyContent)
                         tempMap[title] =
                             NewsItem(title, imgUrl, des, content, url, keywords)
