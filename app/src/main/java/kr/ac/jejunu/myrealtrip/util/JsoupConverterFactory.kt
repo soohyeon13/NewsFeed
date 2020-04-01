@@ -33,10 +33,10 @@ object JsoupConverterFactory : Converter.Factory() {
                 else -> Parser.htmlParser()
             }
             val chartName = value?.contentType()?.charset()?.name()?.toLowerCase()
-            if (chartName == "euc-kr") {
-                return Jsoup.parse(value.byteStream(), chartName, baseUri, parser)
+            return if (chartName == "euc-kr") {
+                Jsoup.parse(value.byteStream(), chartName, baseUri, parser)
             } else {
-                return Jsoup.parse(value?.byteStream(), "utf-8", baseUri, parser)
+                Jsoup.parse(value?.byteStream(), "utf-8", baseUri, parser)
             }
         }
     }

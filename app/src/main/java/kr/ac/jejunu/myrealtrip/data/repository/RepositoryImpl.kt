@@ -10,7 +10,6 @@ import kr.ac.jejunu.myrealtrip.data.service.HtmlService
 import kr.ac.jejunu.myrealtrip.data.service.RssService
 import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 import kr.ac.jejunu.myrealtrip.domain.repository.Repository
-import java.nio.charset.Charset
 
 class RepositoryImpl(
     private val rssService: RssService,
@@ -37,7 +36,6 @@ class RepositoryImpl(
             }.ignoreElement()
     }
 
-    //TODO 얘 너무 이름 길다.
     private fun loadHtml(rssResponse: RssResponse) {
         rssResponse.channelResponse?.itemResponse?.forEach { item ->
             val url = item.link.toString()
@@ -48,19 +46,21 @@ class RepositoryImpl(
         }
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     private fun getHtml(resultRex: String?, title: String?, url: String) {
         resultRex?.let { reg ->
             htmlService
                 .getHtml(reg, URL_QUERY)
                 .subscribeOn(Schedulers.io())
                 .subscribe({ document ->
+                    val checkKR = Regex(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")
                     val imgUrl = document.head().select(META_IMAGE_TAG).attr(META_CONTENT)
                     val des = document.head().select(META_DESCRIPTION_TAG).attr(META_CONTENT)
                     val content = document.body().select(BODY_ARTICLE_CONTENT).text()
                     var keyContent = content
                     if (content.isNullOrEmpty()) keyContent = des
                     val tempMap = newsItemsMap.value!!
-                    if (!tempMap.contains(title)) {
+                    if (!tempMap.contains(title) || !checkKR.matches(des)) {
                         val keywords = findKeyWord(keyContent)
                         tempMap[title] =
                             NewsItem(title, imgUrl, des, content, url, keywords)
