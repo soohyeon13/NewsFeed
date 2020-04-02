@@ -20,8 +20,6 @@ import java.nio.charset.Charset
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-//        val url ="https://news.google.com/__i/rss/rd/articles/CBMiNmh0dHBzOi8vd3d3Lm1rLmNvLmtyL25ld3Mvc29jaWV0eS92aWV3LzIwMjAvMDMvMzI2MjI5L9IBOGh0dHBzOi8vbS5tay5jby5rci9uZXdzL3NvY2lldHkvdmlldy1hbXAvMjAyMC8wMy8zMjYyMjkv?oc=5"
-//        val doc = Jsoup.parse(URL(url).openStream(),Charset.forName("euc-kr"),url)
         Jsoup.connect("https://news.google.com/__i/rss/rd/articles/CBMiNmh0dHBzOi8vd3d3Lm1rLmNvLmtyL25ld3Mvc29jaWV0eS92aWV3LzIwMjAvMDMvMzI2MjI5L9IBOGh0dHBzOi8vbS5tay5jby5rci9uZXdzL3NvY2lldHkvdmlldy1hbXAvMjAyMC8wMy8zMjYyMjkv?oc=5")
             .get().run {
                 println(this)
