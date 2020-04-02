@@ -1,21 +1,20 @@
 package kr.ac.jejunu.myrealtrip.util
 
-import android.util.DisplayMetrics
-import android.util.Log
-import android.view.View
-import android.view.WindowManager
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.signature.ObjectKey
-import com.mrt.nasca.NascaView
-import kr.ac.jejunu.myrealtrip.R
-object BindingAdapter  {
+
+object BindingAdapter {
     @JvmStatic
     @BindingAdapter("ImageUrl")
-    fun setImageUrl(view:NascaView,url:String?) {
-        url?.let { view.loadImages(it) }
+    fun setImageUrl(view: ImageView, url: String?) {
+        val requestOptions = RequestOptions()
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+        Glide.with(view.context)
+            .load(url)
+            .apply(requestOptions)
+            .into(view)
     }
 }

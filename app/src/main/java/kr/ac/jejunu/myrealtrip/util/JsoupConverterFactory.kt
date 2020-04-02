@@ -1,16 +1,12 @@
 package kr.ac.jejunu.myrealtrip.util
 
-import android.util.Log
 import okhttp3.ResponseBody
-import okhttp3.internal.cacheGet
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.parser.Parser
 import retrofit2.Converter
 import retrofit2.Retrofit
 import java.lang.reflect.Type
-import java.net.URL
-import java.nio.charset.Charset
 
 object JsoupConverterFactory : Converter.Factory() {
     private val TAG = "JsoupConverter"

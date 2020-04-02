@@ -15,9 +15,8 @@ import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 import kr.ac.jejunu.myrealtrip.ui.news.adapter.NewsAdapter
 import kr.ac.jejunu.myrealtrip.ui.news.listener.OnItemClickEvent
 import kr.ac.jejunu.myrealtrip.ui.news.viewmodel.NewsViewModel
-import kr.ac.jejunu.myrealtrip.ui.newsdetail.NewsDetailFragmentArgs
 import org.koin.android.ext.android.inject
-import java.util.ArrayList
+import java.util.*
 
 class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
     companion object {

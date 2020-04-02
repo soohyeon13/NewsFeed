@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kr.ac.jejunu.myrealtrip.base.BaseItemViewModel
 import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
-import kr.ac.jejunu.myrealtrip.util.SingleLiveEvent
 
 class NewsItemViewModel() : BaseItemViewModel<NewsItem?>() {
     private val TAG = "NewsItemViewModel"

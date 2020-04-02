@@ -20,7 +20,8 @@ class NewsActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        val binding:ActivityNewsBinding = DataBindingUtil.setContentView(this, R.layout.activity_news)
+        val binding: ActivityNewsBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_news)
         navController = Navigation.findNavController(this, R.id.fragment)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
