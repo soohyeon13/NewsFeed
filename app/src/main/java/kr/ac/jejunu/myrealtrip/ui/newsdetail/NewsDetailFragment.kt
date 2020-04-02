@@ -28,6 +28,7 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>(R.layout.frag
 
             override fun onLoadingFailed(url: String, errorCode: Int, errorMsg: CharSequence?) {
                 super.onLoadingFailed(url, errorCode, errorMsg)
+                binding.detailWebView.visibility = View.INVISIBLE
                 binding.failedLoad.visibility = View.VISIBLE
             }
 

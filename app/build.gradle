@@ -28,8 +28,8 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility = "8"
-        sourceCompatibility = "8"
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget ="1.8"
@@ -45,6 +45,7 @@ dependencies {
     implementation("com.google.guava:guava:28.2-android")
     //mrt-nasca -https://github.com/myrealtrip/nasca
     implementation "com.github.myrealtrip:nasca:$rootProject.nasca_version"
+    implementation "javax.xml.bind:jaxb-api:2.3.1"
     //viewmodel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycle_viewModel_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycle_viewModel_version"
