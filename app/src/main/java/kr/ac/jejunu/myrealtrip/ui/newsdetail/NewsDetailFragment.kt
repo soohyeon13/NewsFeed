@@ -1,7 +1,9 @@
 package kr.ac.jejunu.myrealtrip.ui.newsdetail
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import android.webkit.WebChromeClient
 import com.mrt.nasca.NascaViewListener
 import kr.ac.jejunu.myrealtrip.R
 import kr.ac.jejunu.myrealtrip.base.BaseFragment
@@ -15,10 +17,15 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>(R.layout.frag
         super.onViewCreated(view, savedInstanceState)
         initView()
     }
+    @SuppressLint("SetJavaScriptEnabled")
     private fun initView() {
-        arguments?.let {
-            binding.detailWebView.loadUrl("${it.get("newsLink")}")
-            binding.keyword = it.getStringArrayList("newsKeyWords")
+        binding.detailWebView.apply {
+            arguments?.let {
+                this.loadUrl("${it.get("newsLink")}")
+                binding.keyword = it.getStringArrayList("newsKeyWords")
+            }
+            this.settings.javaScriptEnabled = true
+            this.webChromeClient = WebChromeClient()
         }
         binding.detailWebView.listener = object : NascaViewListener() {
             override fun onImageClicked(index: Int, url: String) {

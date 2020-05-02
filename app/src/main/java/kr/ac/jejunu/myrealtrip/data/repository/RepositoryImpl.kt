@@ -63,6 +63,7 @@ class RepositoryImpl(
                         val keywords = findKeyWord(keyContent)
                         tempMap[title] =
                             NewsItem(title, imgUrl, des, content, url, keywords)
+                        Log.d(TAG,"${tempMap}")
                         newsItemsMap.onNext(tempMap)
                     }
                 }, {

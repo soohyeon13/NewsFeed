@@ -7,6 +7,7 @@ import kr.ac.jejunu.myrealtrip.data.service.RssService
 import kr.ac.jejunu.myrealtrip.ui.news.adapter.NewsAdapter
 import kr.ac.jejunu.myrealtrip.ui.news.viewmodel.NewsViewModel
 import kr.ac.jejunu.myrealtrip.ui.splash.viewmodel.SplashViewModel
+import kr.ac.jejunu.myrealtrip.util.HttpClientService
 import kr.ac.jejunu.myrealtrip.util.JsoupConverterFactory
 import kr.ac.jejunu.myrealtrip.util.ResponseInterceptor
 import okhttp3.OkHttpClient
@@ -15,6 +16,7 @@ import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
+import javax.net.ssl.TrustManager
 
 val client = OkHttpClient
     .Builder()

@@ -1,6 +1,7 @@
 package kr.ac.jejunu.myrealtrip.ui.news
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -24,6 +25,8 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
     }
 
     private val refresh = SwipeRefreshLayout.OnRefreshListener {
+        binding.newsRecycler.removeAllViewsInLayout()
+        binding.newsRecycler.adapter = newsAdapter
         viewModel.reload()
         binding.swipeRefreshLayout.isRefreshing = false
     }
@@ -39,6 +42,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
 
     private fun observe() {
         viewModel.newsItemsLiveData.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG,it.toString())
             newsAdapter.setNewsItem(it)
         })
     }
