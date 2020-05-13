@@ -6,4 +6,5 @@
     <string name="explain_third">뉴스를 클릭하면 원본 뉴스를\n볼 수 있습니다.</string>
     <string name="failed_webview_load">주소가 올바르지 않습니다.</string>
     <string name="news_label">뉴스</string>
+    <string name="hint">뉴스 검색</string>
 </resources>

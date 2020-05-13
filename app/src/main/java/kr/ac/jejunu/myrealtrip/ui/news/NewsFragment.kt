@@ -1,8 +1,11 @@
 package kr.ac.jejunu.myrealtrip.ui.news
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -42,7 +45,6 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
 
     private fun observe() {
         viewModel.newsItemsLiveData.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG,it.toString())
             newsAdapter.setNewsItem(it)
         })
     }
@@ -70,6 +72,8 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
         }
         newsAdapter.setOnItemClickListener(object : OnItemClickEvent<NewsItem> {
             override fun onItemClick(item: NewsItem?) {
+//                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item?.link))
+//                startActivity(intent)
                 val bundle = Bundle()
                 bundle.apply {
                     this.putString("newsTitle", item?.title)
@@ -77,6 +81,22 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
                     this.putStringArrayList("newsKeyWords",item?.keyWord as ArrayList<String>)
                 }
                 findNavController().navigate(R.id.action_newsFragment_to_newsDetailFragment, bundle)
+            }
+        })
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let { viewModel.search(it) }
+                binding.newsRecycler.removeAllViewsInLayout()
+                binding.newsRecycler.adapter = newsAdapter
+                viewModel.reload()
+                viewModel.searchItemLiveData.observe(viewLifecycleOwner, Observer {
+                    newsAdapter.setNewsItem(it)
+                })
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                Log.d(TAG,"change $newText")
+                return false
             }
         })
     }

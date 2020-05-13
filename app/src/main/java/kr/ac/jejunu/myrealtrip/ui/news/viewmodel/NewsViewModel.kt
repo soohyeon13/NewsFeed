@@ -4,20 +4,33 @@ import android.util.Log
 import io.reactivex.subjects.BehaviorSubject
 import kr.ac.jejunu.myrealtrip.base.BaseViewModel
 import kr.ac.jejunu.myrealtrip.domain.repository.Repository
+import kr.ac.jejunu.myrealtrip.domain.repository.SearchRepository
 import kr.ac.jejunu.myrealtrip.util.toLiveData
 
 class NewsViewModel(
-    private val repository: Repository
+    private val repository: Repository,
+    private val searchRepository: SearchRepository
 ) : BaseViewModel() {
     companion object {
         private val TAG = "NewsViewModel"
     }
 
     private var page = BehaviorSubject.createDefault(1)
+    private var searchPage = BehaviorSubject.createDefault(1)
     val newsItemsLiveData = page.switchMap { page -> repository.getNewsItems(page) }.toLiveData()
+    val searchItemLiveData = searchRepository.getSearchNews().toLiveData()
 
     fun reload() {
         loadNewsItems()
+    }
+
+
+    fun search(news : String) {
+        searchRepository.loadSearchNews(news,searchPage.value!!).subscribe({},{
+            Log.d(TAG,"search error ${it.message}")
+        }).let {
+            addDisposable(it)
+        }
     }
 
     fun loadPage() {

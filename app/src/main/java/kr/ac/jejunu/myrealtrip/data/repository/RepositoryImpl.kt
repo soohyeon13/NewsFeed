@@ -5,9 +5,11 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
+import kr.ac.jejunu.myrealtrip.data.response.Items
 import kr.ac.jejunu.myrealtrip.data.response.RssResponse
 import kr.ac.jejunu.myrealtrip.data.service.HtmlService
 import kr.ac.jejunu.myrealtrip.data.service.RssService
+import kr.ac.jejunu.myrealtrip.data.service.SearchService
 import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 import kr.ac.jejunu.myrealtrip.domain.repository.Repository
 
@@ -26,7 +28,6 @@ class RepositoryImpl(
 
     private val newsItemsMap =
         BehaviorSubject.createDefault<LinkedHashMap<String?, NewsItem>>(linkedMapOf())
-
     override fun loadNews(): Completable {
         return rssService.searchRss()
             .subscribeOn(Schedulers.io())
@@ -63,7 +64,6 @@ class RepositoryImpl(
                         val keywords = findKeyWord(keyContent)
                         tempMap[title] =
                             NewsItem(title, imgUrl, des, content, url, keywords)
-                        Log.d(TAG,"${tempMap}")
                         newsItemsMap.onNext(tempMap)
                     }
                 }, {

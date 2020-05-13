@@ -3,17 +3,23 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'kotlin-kapt'
+
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 android {
     compileSdkVersion 28
     buildToolsVersion "29.0.2"
 
     defaultConfig {
         applicationId "kr.ac.jejunu.myrealtrip"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-
+        buildConfigField "String", "Client_ID", localProperties['Client_ID']
+        buildConfigField "String", "Client_Secret", localProperties['Client_Secret']
+//        buildConfigField "String,", "Google_Key", localProperties['Google_News_Api_key']
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -67,8 +73,11 @@ dependencies {
         exclude group: 'stax', module: 'stax-api'
         exclude group: 'stax', module: 'stax'
     }
+    implementation "com.google.code.gson:gson:$rootProject.retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofit_version"
     //okhttpclient -https://square.github.io/okhttp/
     implementation "com.squareup.okhttp3:okhttp:$rootProject.okhttp_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttp_version"
     //koin -https://github.com/InsertKoinIO/koin
     implementation "org.koin:koin-androidx-scope:$rootProject.koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$rootProject.koin_version"
