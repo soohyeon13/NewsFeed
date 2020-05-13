@@ -1,7 +1,5 @@
 package kr.ac.jejunu.myrealtrip.ui.news
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -20,12 +18,12 @@ import kr.ac.jejunu.myrealtrip.ui.news.adapter.NewsAdapter
 import kr.ac.jejunu.myrealtrip.ui.news.listener.OnItemClickEvent
 import kr.ac.jejunu.myrealtrip.ui.news.viewmodel.NewsViewModel
 import org.koin.android.ext.android.inject
-import java.util.*
 
 class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
     companion object {
         private val TAG = "NewsFragment"
     }
+    private lateinit var searchResultItems : List<NewsItem>
 
     private val refresh = SwipeRefreshLayout.OnRefreshListener {
         binding.newsRecycler.removeAllViewsInLayout()
@@ -91,6 +89,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
                 viewModel.reload()
                 viewModel.searchItemLiveData.observe(viewLifecycleOwner, Observer {
                     newsAdapter.setNewsItem(it)
+                    searchResultItems = it
                 })
                 return false
             }

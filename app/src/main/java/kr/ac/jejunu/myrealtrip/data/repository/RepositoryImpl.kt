@@ -34,7 +34,9 @@ class RepositoryImpl(
             .doOnSuccess {
                 if (!it.channelResponse?.itemResponse.isNullOrEmpty())
                     loadHtml(it)
-            }.ignoreElement()
+            }
+            .doOnError { error -> Log.d(TAG,"rss error ${error.message}") }
+            .ignoreElement()
     }
 
     private fun loadHtml(rssResponse: RssResponse) {
@@ -67,7 +69,7 @@ class RepositoryImpl(
                         newsItemsMap.onNext(tempMap)
                     }
                 }, {
-                    Log.d(TAG, "error ${it.message}")
+                    Log.d(TAG, "error html ${it.message}")
                 })
         }
     }

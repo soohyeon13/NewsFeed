@@ -41,8 +41,8 @@ class SearchRepositoryImpl(
             val doc = Jsoup.connect(it.originallink).get()
             val img = doc.head().select(META_IMAGE_TAG).attr(META_CONTENT)
             val title = it.title
-                .replace("<br>","")
-                .replace("</br>","")
+                .replace("<b>","")
+                .replace("</b>","")
                 .replace("&quot;","")
             val content = doc.body().select(BODY_ARTICLE_CONTENT).text()
             var keyword = content
@@ -53,6 +53,7 @@ class SearchRepositoryImpl(
                 val keywords = findKeyWord(keyword)
                 tempMap[title] =
                     NewsItem(title, img, it.description, content, it.originallink, keywords)
+                Log.d(TAG,tempMap.toString())
                 searchItemsMap.onNext(tempMap)
             }
         }

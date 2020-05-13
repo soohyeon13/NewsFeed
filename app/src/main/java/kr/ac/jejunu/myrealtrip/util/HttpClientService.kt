@@ -6,6 +6,7 @@ import java.lang.Exception
 import java.lang.RuntimeException
 import java.security.cert.CertificateEncodingException
 import java.security.cert.X509Certificate
+import java.util.concurrent.TimeUnit
 import javax.net.ssl.*
 
 class HttpClientService {
@@ -35,12 +36,14 @@ class HttpClientService {
                 val sslContext = SSLContext.getInstance("SSL")
                 sslContext.init(null, trustAllCerts, java.security.SecureRandom())
                 val sslSocketFactory = sslContext.socketFactory
-                val builder = OkHttpClient.Builder()
+                return OkHttpClient.Builder()
                     .sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
                     .hostnameVerifier(HostnameVerifier { _, _ -> true })
+                    .readTimeout(120, TimeUnit.SECONDS)
+                    .writeTimeout(120, TimeUnit.SECONDS)
+                    .connectTimeout(120, TimeUnit.SECONDS)
                     .addInterceptor(ResponseInterceptor())
                     .build()
-                return builder
             } catch (e: Exception) {
                 throw RuntimeException(e)
             }

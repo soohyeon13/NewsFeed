@@ -45,7 +45,7 @@ var dataModules = module {
             .baseUrl("https://news.google.com/")
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
             .addConverterFactory(SimpleXmlConverterFactory.create())
-            .client(client)
+            .client(HttpClientService.getUnsafeOkHttpClient())
             .build()
             .create(RssService::class.java)
     }
@@ -54,7 +54,7 @@ var dataModules = module {
             .baseUrl("https://news.google.com/")
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
             .addConverterFactory(JsoupConverterFactory)
-            .client(client)
+            .client(HttpClientService.getUnsafeOkHttpClient())
             .build()
             .create(HtmlService::class.java)
     }

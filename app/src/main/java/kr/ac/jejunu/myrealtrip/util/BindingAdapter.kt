@@ -14,6 +14,7 @@ object BindingAdapter {
             .diskCacheStrategy(DiskCacheStrategy.ALL)
         Glide.with(view.context)
             .load(url)
+            .override(100,100)
             .apply(requestOptions)
             .into(view)
     }
