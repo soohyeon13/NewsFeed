@@ -10,6 +10,7 @@ import kr.ac.jejunu.myrealtrip.data.service.SearchService
 import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 import kr.ac.jejunu.myrealtrip.domain.repository.SearchRepository
 import org.jsoup.Jsoup
+import javax.net.ssl.SSLContext
 
 class SearchRepositoryImpl(
     private val searchService: SearchService
@@ -32,7 +33,7 @@ class SearchRepositoryImpl(
             .doOnSuccess {
                 if (!it.items.isNullOrEmpty()) loadResultUrl(it)
             }
-            .doOnError { error -> Log.d(TAG,"error ${error.message}") }
+            .doOnError { error -> Log.d(TAG, "error ${error.message}") }
             .ignoreElement()
     }
 
@@ -41,9 +42,13 @@ class SearchRepositoryImpl(
             val doc = Jsoup.connect(it.originallink).get()
             val img = doc.head().select(META_IMAGE_TAG).attr(META_CONTENT)
             val title = it.title
-                .replace("<b>","")
-                .replace("</b>","")
-                .replace("&quot;","")
+                .replace("<b>", "")
+                .replace("</b>", "")
+                .replace("&quot;", "")
+            val description = it.description
+                .replace("<b>", "")
+                .replace("</b>", "")
+                .replace("&quot;", "")
             val content = doc.body().select(BODY_ARTICLE_CONTENT).text()
             var keyword = content
             if (keyword.isNullOrEmpty()) keyword = it.description
@@ -52,8 +57,8 @@ class SearchRepositoryImpl(
             if (!tempMap.containsKey(title)) {
                 val keywords = findKeyWord(keyword)
                 tempMap[title] =
-                    NewsItem(title, img, it.description, content, it.originallink, keywords)
-                Log.d(TAG,tempMap.toString())
+                    NewsItem(title, img, description, content, it.originallink, keywords)
+                Log.d(TAG, tempMap.toString())
                 searchItemsMap.onNext(tempMap)
             }
         }
@@ -100,5 +105,9 @@ class SearchRepositoryImpl(
 
     override fun getSearchNews(): Observable<List<NewsItem>> {
         return searchItemsMap.map { it.values.toList() }.hide()
+    }
+
+    override fun clear() {
+        searchItemsMap.onNext(linkedMapOf())
     }
 }

@@ -5,11 +5,9 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
-import kr.ac.jejunu.myrealtrip.data.response.Items
 import kr.ac.jejunu.myrealtrip.data.response.RssResponse
 import kr.ac.jejunu.myrealtrip.data.service.HtmlService
 import kr.ac.jejunu.myrealtrip.data.service.RssService
-import kr.ac.jejunu.myrealtrip.data.service.SearchService
 import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 import kr.ac.jejunu.myrealtrip.domain.repository.Repository
 
@@ -113,8 +111,14 @@ class RepositoryImpl(
     private fun sortByWord(words: List<Pair<Int?, List<Pair<String, Int?>>>>, index: Int)
             : List<Pair<String, Int?>> = words[index].second.sortedBy { (word, _) -> word }
 
+
+
     override fun getNewsItems(page: Int): Observable<List<NewsItem>> {
         return newsItemsMap.filter { it.values.size < page * 20 }
             .map { it.values.toList().takeLast(page * 20) }.distinctUntilChanged().hide()
+    }
+
+    override fun clear() {
+        newsItemsMap.onNext(linkedMapOf())
     }
 }

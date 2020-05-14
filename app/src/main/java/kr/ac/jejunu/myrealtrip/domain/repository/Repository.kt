@@ -8,4 +8,5 @@ import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 interface Repository {
     fun loadNews() : Completable
     fun getNewsItems(page:Int) : Observable<List<NewsItem>>
+    fun clear()
 }

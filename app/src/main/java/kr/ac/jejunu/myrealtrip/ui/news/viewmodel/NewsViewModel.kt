@@ -1,8 +1,12 @@
 package kr.ac.jejunu.myrealtrip.ui.news.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import io.reactivex.subjects.BehaviorSubject
 import kr.ac.jejunu.myrealtrip.base.BaseViewModel
+import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 import kr.ac.jejunu.myrealtrip.domain.repository.Repository
 import kr.ac.jejunu.myrealtrip.domain.repository.SearchRepository
 import kr.ac.jejunu.myrealtrip.util.toLiveData
@@ -19,15 +23,18 @@ class NewsViewModel(
     private var searchPage = BehaviorSubject.createDefault(1)
     val newsItemsLiveData = page.switchMap { page -> repository.getNewsItems(page) }.toLiveData()
     val searchItemLiveData = searchRepository.getSearchNews().toLiveData()
-
     fun reload() {
         loadNewsItems()
     }
 
+    fun clear(type: String) {
+        if (type == "search") searchRepository.clear()
+        else repository.clear()
+    }
 
-    fun search(news : String) {
-        searchRepository.loadSearchNews(news,searchPage.value!!).subscribe({},{
-            Log.d(TAG,"search error ${it.message}")
+    fun search(news: String) {
+        searchRepository.loadSearchNews(news, searchPage.value!!).subscribe({}, {
+            Log.d(TAG, "search error ${it.message}")
         }).let {
             addDisposable(it)
         }
