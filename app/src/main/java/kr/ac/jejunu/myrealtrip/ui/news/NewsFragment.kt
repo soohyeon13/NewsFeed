@@ -5,12 +5,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import kr.ac.jejunu.myrealtrip.BuildConfig
 import kr.ac.jejunu.myrealtrip.R
 import kr.ac.jejunu.myrealtrip.base.BaseFragment
 import kr.ac.jejunu.myrealtrip.databinding.FragmentNewsBinding
@@ -19,6 +22,7 @@ import kr.ac.jejunu.myrealtrip.ui.news.adapter.NewsAdapter
 import kr.ac.jejunu.myrealtrip.ui.news.listener.OnItemClickEvent
 import kr.ac.jejunu.myrealtrip.ui.news.viewmodel.NewsViewModel
 import org.koin.android.ext.android.inject
+import java.util.*
 
 class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
     companion object {
@@ -96,22 +100,22 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
 //                findNavController().navigate(R.id.action_newsFragment_to_newsDetailFragment, bundle)
             }
         })
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let { viewModel.search(it) }
-                viewModel.clear("search")
-                loadSearchResult()
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
-        })
-        binding.searchView.setOnCloseListener {
-            viewModel.clear("search")
-            loadInitNewItem()
-            false
-        }
+//        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                query?.let { viewModel.search(it) }
+//                viewModel.clear("search")
+//                loadSearchResult()
+//                return false
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                return false
+//            }
+//        })
+//        binding.searchView.setOnCloseListener {
+//            viewModel.clear("search")
+//            loadInitNewItem()
+//            false
+//        }
     }
 }

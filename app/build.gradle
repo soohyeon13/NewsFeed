@@ -15,11 +15,11 @@ android {
         applicationId "kr.ac.jejunu.myrealtrip"
         minSdkVersion 24
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2.0"
         buildConfigField "String", "Client_ID", localProperties['Client_ID']
         buildConfigField "String", "Client_Secret", localProperties['Client_Secret']
-//        buildConfigField "String,", "Google_Key", localProperties['Google_News_Api_key']
+        buildConfigField "String", "Google_News_Api_key", localProperties['Google_News_Api_key']
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -50,6 +50,10 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation("com.google.guava:guava:28.2-android")
     implementation "javax.xml.bind:jaxb-api:2.3.1"
+    //android - room
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
     //mrt-nasca -https://github.com/myrealtrip/nasca
     implementation "com.github.myrealtrip:nasca:$rootProject.nasca_version"
     //viewmodel

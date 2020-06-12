@@ -11,7 +11,6 @@ class SplashViewModel(private val repository: Repository) : BaseViewModel() {
     }
 
     init {
-        Log.d(TAG,Objects.toString(repository))
         repository.loadNews().subscribe({}, {
             Log.d(TAG, "${it.printStackTrace()}")
         }).let { addDisposable(it) }

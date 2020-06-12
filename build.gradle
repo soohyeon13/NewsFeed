@@ -40,4 +40,5 @@ ext {
     paging_version = '2.1.2'
     okhttp_version = '4.4.0'
     nasca_version = '1.0.4'
+    room_version ='2.2.3'
 }

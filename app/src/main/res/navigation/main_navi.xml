@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navi"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="kr.ac.jejunu.myrealtrip.ui.splash.SplashFragment"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_splashFragment_to_newsFragment"
+            app:destination="@id/newsFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newsFragment"
+        android:name="kr.ac.jejunu.myrealtrip.ui.news.NewsFragment"
+        android:label="@string/news_label"
+        tools:layout="@layout/fragment_news">
+        <action
+            android:id="@+id/action_newsFragment_to_newsDetailFragment"
+            app:destination="@id/newsDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newsDetailFragment"
+        android:name="kr.ac.jejunu.myrealtrip.ui.newsdetail.NewsDetailFragment"
+        android:label="{newsTitle}"
+        tools:layout="@layout/fragment_news_detail"
+        >
+        <argument
+            android:name="newsTitle"
+            app:argType="string"/>
+    </fragment>
+
+</navigation>

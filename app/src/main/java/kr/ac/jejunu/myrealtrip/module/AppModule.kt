@@ -4,9 +4,12 @@ import com.google.gson.GsonBuilder
 import kr.ac.jejunu.myrealtrip.domain.repository.Repository
 import kr.ac.jejunu.myrealtrip.data.repository.RepositoryImpl
 import kr.ac.jejunu.myrealtrip.data.repository.SearchRepositoryImpl
+import kr.ac.jejunu.myrealtrip.data.repository.CategoryRepositoryImpl
 import kr.ac.jejunu.myrealtrip.data.service.HtmlService
+import kr.ac.jejunu.myrealtrip.data.service.NewsCategoryService
 import kr.ac.jejunu.myrealtrip.data.service.RssService
 import kr.ac.jejunu.myrealtrip.data.service.SearchService
+import kr.ac.jejunu.myrealtrip.domain.repository.CategoryRepository
 import kr.ac.jejunu.myrealtrip.domain.repository.SearchRepository
 import kr.ac.jejunu.myrealtrip.ui.news.adapter.NewsAdapter
 import kr.ac.jejunu.myrealtrip.ui.news.viewmodel.NewsViewModel
@@ -23,7 +26,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import java.util.concurrent.TimeUnit
-import javax.net.ssl.TrustManager
 
 val client = OkHttpClient
     .Builder()
@@ -32,7 +34,6 @@ val client = OkHttpClient
     .connectTimeout(120, TimeUnit.SECONDS)
     .addInterceptor(ResponseInterceptor())
     .build()
-
 val gson = GsonBuilder()
     .setDateFormat("EEE, d MMM yyyy HH:mm:ss Z")
     .create()
@@ -40,6 +41,11 @@ val gson = GsonBuilder()
 var dataModules = module {
     single<Repository> { RepositoryImpl(get(), get()) }
     single<SearchRepository> { SearchRepositoryImpl(get()) }
+    single<CategoryRepository> {
+        CategoryRepositoryImpl(
+            get()
+        )
+    }
     single<RssService> {
         Retrofit.Builder()
             .baseUrl("https://news.google.com/")
@@ -67,9 +73,18 @@ var dataModules = module {
             .build()
             .create(SearchService::class.java)
     }
+    single<NewsCategoryService> {
+        Retrofit.Builder()
+            .baseUrl("http://newsapi.org/v2/")
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(client)
+            .build()
+            .create(NewsCategoryService::class.java)
+    }
 }
 var viewModelModules = module {
-    viewModel { NewsViewModel(get(), get()) }
+    viewModel { NewsViewModel(get(), get(),get()) }
     viewModel { SplashViewModel(get()) }
 }
 var adapterModules = module {

@@ -39,7 +39,12 @@ class SearchRepositoryImpl(
 
     private fun loadResultUrl(searchResult: RssSearchResponse) {
         searchResult.items.forEach {
-            val doc = Jsoup.connect(it.originallink).get()
+            val doc = Jsoup
+                .connect(it.originallink)
+                .ignoreHttpErrors(true)
+                .validateTLSCertificates(true)
+                .followRedirects(true)
+                .get()
             val img = doc.head().select(META_IMAGE_TAG).attr(META_CONTENT)
             val title = it.title
                 .replace("<b>", "")
