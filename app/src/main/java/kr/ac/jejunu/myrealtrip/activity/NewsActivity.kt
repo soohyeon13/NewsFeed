@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.activity_news.*
 import kr.ac.jejunu.myrealtrip.R
 import kr.ac.jejunu.myrealtrip.databinding.ActivityNewsBinding
 import kr.ac.jejunu.myrealtrip.ui.news.NewsFragment
-import kr.ac.jejunu.myrealtrip.ui.news.NewsFragmentDirections
 
 class NewsActivity : AppCompatActivity() {
     private lateinit var navController: NavController

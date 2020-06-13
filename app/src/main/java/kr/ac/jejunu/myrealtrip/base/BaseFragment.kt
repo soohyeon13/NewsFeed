@@ -23,11 +23,11 @@ abstract class BaseFragment<VDB : ViewDataBinding>(
         return binding.root
     }
 
-    companion object {
-        fun <T : Fragment> newInstance(fragment: T): T {
-            val args = Bundle()
-            fragment.arguments = args
-            return fragment
-        }
-    }
+//    companion object {
+//        fun <T : Fragment> newInstance(fragment: T): T {
+//            val args = Bundle()
+//            fragment.arguments = args
+//            return fragment
+//        }
+//    }
 }

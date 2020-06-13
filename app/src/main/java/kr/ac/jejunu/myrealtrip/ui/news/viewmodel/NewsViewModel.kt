@@ -21,15 +21,12 @@ class NewsViewModel(
     companion object {
         private val TAG = "NewsViewModel"
     }
-    init {
-        cateRepository.loadCateNews("kr","sports",BuildConfig.Google_News_Api_key).subscribe({},{
-            Log.d(TAG,it.message)
-        }).let { addDisposable(it) }
-    }
+
     private var page = BehaviorSubject.createDefault(1)
     private var searchPage = BehaviorSubject.createDefault(1)
     val newsItemsLiveData = page.concatMapEager { page -> repository.getNewsItems(page) }.toLiveData()
     val searchItemLiveData = searchRepository.getSearchNews().toLiveData()
+    val cateNewsItemsLiveData = cateRepository.getCateNews().toLiveData()
     fun reload() {
         loadNewsItems()
     }
@@ -57,5 +54,12 @@ class NewsViewModel(
         }).let {
             addDisposable(it)
         }
+    }
+
+    fun loadCateNews(query : String) {
+        cateRepository.clear()
+        cateRepository.loadCateNews("kr",query,BuildConfig.Google_News_Api_key).subscribe({},{
+            Log.d(TAG,it.message)
+        }).let { addDisposable(it) }
     }
 }

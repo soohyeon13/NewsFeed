@@ -81,4 +81,8 @@ class CategoryRepositoryImpl(private val service : NewsCategoryService) : Catego
     override fun getCateNews(): Observable<List<NewsItem>> {
         return cateNewsItemsMap.map { it.values.toList() }.hide()
     }
+
+    override fun clear() {
+        cateNewsItemsMap.onNext(linkedMapOf())
+    }
 }

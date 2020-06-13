@@ -7,12 +7,15 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.activity_news.*
 import kr.ac.jejunu.myrealtrip.BuildConfig
 import kr.ac.jejunu.myrealtrip.R
 import kr.ac.jejunu.myrealtrip.base.BaseFragment
@@ -21,12 +24,31 @@ import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 import kr.ac.jejunu.myrealtrip.ui.news.adapter.NewsAdapter
 import kr.ac.jejunu.myrealtrip.ui.news.listener.OnItemClickEvent
 import kr.ac.jejunu.myrealtrip.ui.news.viewmodel.NewsViewModel
+import kr.ac.jejunu.myrealtrip.util.Cate
 import org.koin.android.ext.android.inject
 import java.util.*
 
 class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
     companion object {
         private val TAG = "NewsFragment"
+        private val tabs = arrayOf(
+            Cate.MAINNEWS,
+            Cate.BUSINESS,
+            Cate.ENTERTAINMENT,
+            Cate.GENERAL,
+            Cate.HEALTH,
+            Cate.SCIENCE,
+            Cate.SPORTS,
+            Cate.TECHNOLOGY
+        )
+
+        fun newInstance(cate: String): Fragment {
+            val fragment = NewsFragment()
+            val args = Bundle()
+            args.putString("cate", cate)
+            fragment.arguments = args
+            return fragment
+        }
     }
 
     private val refresh = SwipeRefreshLayout.OnRefreshListener {
@@ -67,6 +89,8 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
     }
 
     private fun initView() {
+        addTab()
+        tabClickEvent()
         binding.swipeRefreshLayout.setOnRefreshListener(refresh)
         mLayoutManager = LinearLayoutManager(requireContext())
         binding.newsRecycler.apply {
@@ -117,5 +141,34 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
 //            loadInitNewItem()
 //            false
 //        }
+    }
+
+    private fun tabClickEvent() {
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(p0: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabUnselected(p0: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabSelected(p0: TabLayout.Tab?) {
+                val cate = p0?.tag as Cate
+                activity?.toolbar?.title = cate.cate
+                println(cate.query)
+            }
+        })
+    }
+
+    private fun addTab() {
+        for (i in tabs.indices) {
+            val tab =
+                binding.tabLayout.newTab().apply {
+                    text = tabs[i].cate
+                    tag = tabs[i]
+                }
+            binding.tabLayout.addTab(tab)
+        }
     }
 }

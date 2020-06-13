@@ -24,6 +24,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(R.layout.fragment_spl
         super.onViewCreated(view, savedInstanceState)
         initView()
     }
+
     private fun initView() {
         binding.versionText.text = "v${BuildConfig.VERSION_NAME}"
         Handler().postDelayed({
