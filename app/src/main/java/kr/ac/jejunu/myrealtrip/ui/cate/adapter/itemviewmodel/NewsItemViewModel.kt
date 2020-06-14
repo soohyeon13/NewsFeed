@@ -1,4 +1,4 @@
-package kr.ac.jejunu.myrealtrip.ui.news.viewmodel.itemviewmodel
+package kr.ac.jejunu.myrealtrip.ui.cate.adapter.itemviewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -26,7 +26,6 @@ class NewsViewModel(
     private var searchPage = BehaviorSubject.createDefault(1)
     val newsItemsLiveData = page.concatMapEager { page -> repository.getNewsItems(page) }.toLiveData()
     val searchItemLiveData = searchRepository.getSearchNews().toLiveData()
-    val cateNewsItemsLiveData = cateRepository.getCateNews().toLiveData()
     fun reload() {
         loadNewsItems()
     }

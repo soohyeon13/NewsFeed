@@ -1,4 +1,4 @@
-package kr.ac.jejunu.myrealtrip.ui.news.listener
+package kr.ac.jejunu.myrealtrip.ui.cate.listener
 
 interface OnItemClickEvent<T> {
     fun onItemClick(item:T?)

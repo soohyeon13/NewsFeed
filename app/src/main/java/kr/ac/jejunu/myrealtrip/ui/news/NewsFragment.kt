@@ -1,32 +1,16 @@
 package kr.ac.jejunu.myrealtrip.ui.news
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_news.*
-import kr.ac.jejunu.myrealtrip.BuildConfig
 import kr.ac.jejunu.myrealtrip.R
 import kr.ac.jejunu.myrealtrip.base.BaseFragment
 import kr.ac.jejunu.myrealtrip.databinding.FragmentNewsBinding
-import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
-import kr.ac.jejunu.myrealtrip.ui.news.adapter.NewsAdapter
-import kr.ac.jejunu.myrealtrip.ui.news.listener.OnItemClickEvent
-import kr.ac.jejunu.myrealtrip.ui.news.viewmodel.NewsViewModel
+import kr.ac.jejunu.myrealtrip.ui.news.adapter.CatePageAdapter
 import kr.ac.jejunu.myrealtrip.util.Cate
-import org.koin.android.ext.android.inject
-import java.util.*
 
 class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
     companion object {
@@ -41,25 +25,7 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
             Cate.SPORTS,
             Cate.TECHNOLOGY
         )
-
-        fun newInstance(cate: String): Fragment {
-            val fragment = NewsFragment()
-            val args = Bundle()
-            args.putString("cate", cate)
-            fragment.arguments = args
-            return fragment
-        }
     }
-
-    private val refresh = SwipeRefreshLayout.OnRefreshListener {
-        viewModel.clear("news")
-        viewModel.reload()
-        binding.swipeRefreshLayout.isRefreshing = false
-    }
-    private val newsAdapter: NewsAdapter by inject()
-    private val viewModel: NewsViewModel by inject()
-    private lateinit var mLayoutManager: LinearLayoutManager
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -67,80 +33,18 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
     }
 
     private fun observe() {
-        if (viewModel.searchItemLiveData.value.isNullOrEmpty()) {
-            loadInitNewItem()
-        } else {
-            loadSearchResult()
-        }
-    }
-
-    private fun loadInitNewItem() {
-        viewModel.newsItemsLiveData.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, it.toString())
-            newsAdapter.setNewsItem(it)
-        })
-    }
-
-    private fun loadSearchResult() {
-        viewModel.searchItemLiveData.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, it.toString())
-            newsAdapter.setNewsItem(it)
-        })
     }
 
     private fun initView() {
-        addTab()
         tabClickEvent()
-        binding.swipeRefreshLayout.setOnRefreshListener(refresh)
-        mLayoutManager = LinearLayoutManager(requireContext())
-        binding.newsRecycler.apply {
-            layoutManager = mLayoutManager
-            adapter = newsAdapter
-            setHasFixedSize(true)
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    if (dy <= 0) return
-                    val totalItemCount = mLayoutManager.itemCount
-                    val lastVisibleItem = mLayoutManager.findLastVisibleItemPosition()
-                    val visibleThreshold = 3
-                    if (totalItemCount <= lastVisibleItem + visibleThreshold) {
-                        viewModel.loadPage()
-                    }
-                }
-            })
-            addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
+        binding.cateViewPager.apply {
+            adapter = CatePageAdapter(this@NewsFragment)
+            orientation = ViewPager2.ORIENTATION_HORIZONTAL
         }
-        newsAdapter.setOnItemClickListener(object : OnItemClickEvent<NewsItem> {
-            override fun onItemClick(item: NewsItem?) {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item?.link))
-                startActivity(intent)
-//                val bundle = Bundle()
-//                bundle.apply {
-//                    this.putString("newsTitle", item?.title)
-//                    this.putString("newsLink", item?.link)
-//                    this.putStringArrayList("newsKeyWords", item?.keyWord as ArrayList<String>)
-//                }
-//                findNavController().navigate(R.id.action_newsFragment_to_newsDetailFragment, bundle)
-            }
-        })
-//        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                query?.let { viewModel.search(it) }
-//                viewModel.clear("search")
-//                loadSearchResult()
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                return false
-//            }
-//        })
-//        binding.searchView.setOnCloseListener {
-//            viewModel.clear("search")
-//            loadInitNewItem()
-//            false
-//        }
+        TabLayoutMediator(binding.tabLayout,binding.cateViewPager) { tab, position ->
+            tab.text = tabs[position].cate
+            tab.tag = tabs[position]
+        }.attach()
     }
 
     private fun tabClickEvent() {
@@ -159,16 +63,5 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
                 println(cate.query)
             }
         })
-    }
-
-    private fun addTab() {
-        for (i in tabs.indices) {
-            val tab =
-                binding.tabLayout.newTab().apply {
-                    text = tabs[i].cate
-                    tag = tabs[i]
-                }
-            binding.tabLayout.addTab(tab)
-        }
     }
 }

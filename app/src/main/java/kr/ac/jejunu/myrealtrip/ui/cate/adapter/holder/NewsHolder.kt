@@ -1,10 +1,10 @@
-package kr.ac.jejunu.myrealtrip.ui.news.adapter.holder
+package kr.ac.jejunu.myrealtrip.ui.cate.adapter.holder
 
 import android.view.View
 import kr.ac.jejunu.myrealtrip.base.BaseViewHolder
 import kr.ac.jejunu.myrealtrip.databinding.NewsItemBinding
 import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
-import kr.ac.jejunu.myrealtrip.ui.news.viewmodel.itemviewmodel.NewsItemViewModel
+import kr.ac.jejunu.myrealtrip.ui.cate.adapter.itemviewmodel.NewsItemViewModel
 
 class NewsHolder(val binding: NewsItemBinding) : BaseViewHolder<NewsItem?>(binding.root) {
 

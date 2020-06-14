@@ -8,7 +8,7 @@
         <import type="android.text.TextUtils"/>
         <variable
             name="itemViewModel"
-            type="kr.ac.jejunu.myrealtrip.ui.news.viewmodel.itemviewmodel.NewsItemViewModel" />
+            type="kr.ac.jejunu.myrealtrip.ui.cate.adapter.itemviewmodel.NewsItemViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -1,4 +1,4 @@
-package kr.ac.jejunu.myrealtrip.ui.news.adapter
+package kr.ac.jejunu.myrealtrip.ui.cate.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kr.ac.jejunu.myrealtrip.R
 import kr.ac.jejunu.myrealtrip.databinding.NewsItemBinding
 import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
-import kr.ac.jejunu.myrealtrip.ui.news.adapter.holder.NewsHolder
-import kr.ac.jejunu.myrealtrip.ui.news.listener.OnItemClickEvent
+import kr.ac.jejunu.myrealtrip.ui.cate.adapter.holder.NewsHolder
+import kr.ac.jejunu.myrealtrip.ui.cate.listener.OnItemClickEvent
 import kr.ac.jejunu.myrealtrip.util.DiffCallback
 
 class NewsAdapter :

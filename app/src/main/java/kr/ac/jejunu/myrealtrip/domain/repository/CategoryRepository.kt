@@ -6,6 +6,6 @@ import kr.ac.jejunu.myrealtrip.domain.model.NewsItem
 
 interface CategoryRepository {
     fun loadCateNews(country : String,category: String, key : String) : Completable
-    fun getCateNews() : Observable<List<NewsItem>>
+    fun getCateNews(category: String) : Observable<List<NewsItem>>
     fun clear()
 }

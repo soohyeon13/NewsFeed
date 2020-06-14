@@ -11,7 +11,15 @@ import kr.ac.jejunu.myrealtrip.data.service.RssService
 import kr.ac.jejunu.myrealtrip.data.service.SearchService
 import kr.ac.jejunu.myrealtrip.domain.repository.CategoryRepository
 import kr.ac.jejunu.myrealtrip.domain.repository.SearchRepository
-import kr.ac.jejunu.myrealtrip.ui.news.adapter.NewsAdapter
+import kr.ac.jejunu.myrealtrip.ui.cate.adapter.NewsAdapter
+import kr.ac.jejunu.myrealtrip.ui.cate.tab.business.BusinessViewModel
+import kr.ac.jejunu.myrealtrip.ui.cate.tab.entertainment.EntertainViewModel
+import kr.ac.jejunu.myrealtrip.ui.cate.tab.general.GeneralViewModel
+import kr.ac.jejunu.myrealtrip.ui.cate.tab.health.HealthViewModel
+import kr.ac.jejunu.myrealtrip.ui.cate.tab.recent_news.RecentNewsViewModel
+import kr.ac.jejunu.myrealtrip.ui.cate.tab.science.ScienceViewModel
+import kr.ac.jejunu.myrealtrip.ui.cate.tab.sports.SportsViewModel
+import kr.ac.jejunu.myrealtrip.ui.cate.tab.technology.TechnologyViewModel
 import kr.ac.jejunu.myrealtrip.ui.news.viewmodel.NewsViewModel
 import kr.ac.jejunu.myrealtrip.ui.splash.viewmodel.SplashViewModel
 import kr.ac.jejunu.myrealtrip.util.HttpClientService
@@ -86,6 +94,14 @@ var dataModules = module {
 var viewModelModules = module {
     viewModel { NewsViewModel(get(), get(),get()) }
     viewModel { SplashViewModel(get()) }
+    viewModel { BusinessViewModel(get()) }
+    viewModel { EntertainViewModel(get()) }
+    viewModel { GeneralViewModel(get()) }
+    viewModel { HealthViewModel(get()) }
+    viewModel { RecentNewsViewModel(get()) }
+    viewModel { ScienceViewModel(get()) }
+    viewModel { SportsViewModel(get()) }
+    viewModel { TechnologyViewModel(get()) }
 }
 var adapterModules = module {
     factory { NewsAdapter() }
