@@ -92,7 +92,7 @@ var dataModules = module {
     }
 }
 var viewModelModules = module {
-    viewModel { NewsViewModel(get(), get(),get()) }
+    viewModel { NewsViewModel() }
     viewModel { SplashViewModel(get()) }
     viewModel { BusinessViewModel(get()) }
     viewModel { EntertainViewModel(get()) }

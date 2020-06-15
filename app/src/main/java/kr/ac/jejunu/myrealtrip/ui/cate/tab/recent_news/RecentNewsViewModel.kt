@@ -21,6 +21,10 @@ class RecentNewsViewModel(private val repository: Repository) :
         loadNewsItems()
     }
 
+    fun clear() {
+        repository.clear()
+    }
+
     fun loadPage() {
         page.onNext(page.value!! + 1)
     }

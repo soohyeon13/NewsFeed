@@ -50,13 +50,9 @@ class NewsFragment : BaseFragment<FragmentNewsBinding>(R.layout.fragment_news) {
     private fun tabClickEvent() {
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(p0: TabLayout.Tab?) {
-
             }
-
             override fun onTabUnselected(p0: TabLayout.Tab?) {
-
             }
-
             override fun onTabSelected(p0: TabLayout.Tab?) {
                 val cate = p0?.tag as Cate
                 activity?.toolbar?.title = cate.cate

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kr.ac.jejunu.myrealtrip.R
 import kr.ac.jejunu.myrealtrip.base.BaseFragment
 import kr.ac.jejunu.myrealtrip.databinding.TabFragmentEntertainBinding
@@ -30,6 +31,10 @@ class EntertainFragment : BaseFragment<TabFragmentEntertainBinding>(R.layout.tab
     private val viewModel : EntertainViewModel by inject()
     private val newsAdapter: NewsAdapter by inject()
     private lateinit var mLayoutManager: LinearLayoutManager
+    private val refresh = SwipeRefreshLayout.OnRefreshListener {
+        viewModel.reload()
+        binding.swipeRefreshLayout.isRefreshing = false
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,9 +42,8 @@ class EntertainFragment : BaseFragment<TabFragmentEntertainBinding>(R.layout.tab
         observe()
     }
     private fun initView() {
-        arguments?.getString("cate")?.let {
-            viewModel.loadCateNews(it)
-        }
+        binding.swipeRefreshLayout.setOnRefreshListener(refresh)
+        viewModel.loadCateNews()
         mLayoutManager = LinearLayoutManager(requireContext())
         binding.newsRecycler.apply {
             layoutManager = mLayoutManager

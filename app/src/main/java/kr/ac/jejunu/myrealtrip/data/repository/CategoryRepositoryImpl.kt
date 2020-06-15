@@ -109,7 +109,7 @@ class CategoryRepositoryImpl(private val service: NewsCategoryService) : Categor
         return subjectDistinct(category).map { it.values.toList() }.hide()
     }
 
-    override fun clear() {
-        businessNewsItemsMap.onNext(linkedMapOf())
+    override fun clear(category: String) {
+        subjectDistinct(category).onNext(linkedMapOf())
     }
 }

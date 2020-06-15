@@ -11,13 +11,17 @@ class GeneralViewModel(private val cateRepository: CategoryRepository) :
     BaseViewModel() {
     companion object{
         private const val TAG = "GeneralViewModel"
+        private val cate = Cate.GENERAL.query
     }
     val generalNewsItemsLiveData = cateRepository.getCateNews(Cate.GENERAL.query).toLiveData()
 
-    fun loadCateNews(query : String) {
-        cateRepository.clear()
-        cateRepository.loadCateNews("kr",query, BuildConfig.Google_News_Api_key).subscribe({},{
+    fun loadCateNews() {
+        cateRepository.loadCateNews("kr",cate, BuildConfig.Google_News_Api_key).subscribe({},{
             Log.d(TAG,it.message)
         }).let { addDisposable(it) }
+    }
+    fun reload() {
+        cateRepository.clear(cate)
+        loadCateNews()
     }
 }
