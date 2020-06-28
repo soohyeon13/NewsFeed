@@ -1,7 +1,10 @@
 package kr.ac.jejunu.myrealtrip.ui.news
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.appcompat.widget.SearchView
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator

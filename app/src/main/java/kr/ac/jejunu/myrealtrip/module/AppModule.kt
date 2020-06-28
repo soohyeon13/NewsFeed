@@ -21,6 +21,7 @@ import kr.ac.jejunu.myrealtrip.ui.cate.tab.science.ScienceViewModel
 import kr.ac.jejunu.myrealtrip.ui.cate.tab.sports.SportsViewModel
 import kr.ac.jejunu.myrealtrip.ui.cate.tab.technology.TechnologyViewModel
 import kr.ac.jejunu.myrealtrip.ui.news.viewmodel.NewsViewModel
+import kr.ac.jejunu.myrealtrip.ui.search.viewmodel.SearchViewModel
 import kr.ac.jejunu.myrealtrip.ui.splash.viewmodel.SplashViewModel
 import kr.ac.jejunu.myrealtrip.util.HttpClientService
 import kr.ac.jejunu.myrealtrip.util.JsoupConverterFactory
@@ -102,6 +103,7 @@ var viewModelModules = module {
     viewModel { ScienceViewModel(get()) }
     viewModel { SportsViewModel(get()) }
     viewModel { TechnologyViewModel(get()) }
+    viewModel { SearchViewModel(get()) }
 }
 var adapterModules = module {
     factory { NewsAdapter() }

@@ -1,5 +1,6 @@
 package kr.ac.jejunu.myrealtrip.ui.cate.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,6 +48,7 @@ class NewsAdapter :
     override fun getItemCount(): Int = newsList.size ?: 0
 
     override fun onBindViewHolder(holder: NewsHolder, position: Int) {
+        Log.d(TAG,newsList[position].toString())
         holder.bind(newsList[position])
         holder.setListener(
             View.OnClickListener { mOnItemClickListener.onItemClick(newsList[position]) }

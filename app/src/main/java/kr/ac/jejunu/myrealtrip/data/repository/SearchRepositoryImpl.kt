@@ -63,7 +63,6 @@ class SearchRepositoryImpl(
                 val keywords = findKeyWord(keyword)
                 tempMap[title] =
                     NewsItem(title, img, description, content, it.originallink, keywords)
-                Log.d(TAG, tempMap.toString())
                 searchItemsMap.onNext(tempMap)
             }
         }
